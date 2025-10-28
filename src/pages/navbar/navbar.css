@@ -1,0 +1,31 @@
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: left;
+    align-items: left;
+    min-width: 240px;
+    height: 100vh;
+    border-right: 3px solid gainsboro;
+    font-size: 20px;
+    background-color: white;
+}
+
+.navOption {
+    padding: 10px;
+    cursor: pointer;
+    color: #1774fc;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.navOption:hover {
+    background-color: #1774fc;
+    color: white;
+}
+
+.line {
+    width: 100%;
+    border-bottom: 2px solid gainsboro;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
