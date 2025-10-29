@@ -5,6 +5,7 @@ import "./home.css";
 import axios from "axios";
 import { Apis } from "../../apis";
 import type { user } from "../../types/user.type";
+import { BackTop } from "antd";
 export default function HomeContent() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -16,6 +17,7 @@ export default function HomeContent() {
   const [starredBoard, setStarredBoard] = useState([]);
   const [userData, setUserData] = useState<user | null>(null);
   const [titleEdit, setTitleEdit] = useState("");
+  const [error, setError] = useState("");
   const colors = [
     "#FF7B00",
     "#8B00FF",
@@ -43,7 +45,9 @@ export default function HomeContent() {
 
       setBoardData(boardFiltered);
       setWorkSpace(boardFiltered.filter((board) => board.is_starred === false));
-      setStarredBoard(boardFiltered.filter((board) => board.is_starred === true));
+      setStarredBoard(
+        boardFiltered.filter((board) => board.is_starred === true)
+      );
       console.log("bang:", boardFiltered);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu", error);
@@ -75,9 +79,15 @@ export default function HomeContent() {
       is_starred: false,
       created_at: Date(),
     };
-    await Apis.board.createBoard(newData);
-    await getBoards();
-    setIsOpen(false);
+    if (newData.title == "") {
+      setError("Please input a valid title");
+    } 
+    else {
+      setError("");
+      await Apis.board.createBoard(newData);
+      await getBoards();
+      setIsOpen(false);
+    }
   }
 
   async function handleEdit(e: FormEvent) {
@@ -91,10 +101,18 @@ export default function HomeContent() {
       is_starred: false,
       created_at: Date(),
     };
-    await Apis.board.editBoard(newData);
-    await getBoards();
-    setIsEditOpen(false);
-    setEditId(null);
+    if (newData.title == "") {
+      setError("Please input a valid title");
+    } else {
+      setError("");
+      await axios.patch(`${import.meta.env.VITE_SV_HOST}/boards/` + editId, {
+        title: (e.target as any).editTitle.value,
+        backdrop: selectedBg,
+      });
+      await getBoards();
+      setIsEditOpen(false);
+      setEditId(null);
+    }
   }
 
   return (
@@ -210,6 +228,7 @@ export default function HomeContent() {
               <p
                 style={{ cursor: "pointer" }}
                 onClick={() => {
+                  setError("");
                   setIsOpen(false);
                   setSelectedBg(null);
                   setSelectedColor(null);
@@ -252,6 +271,7 @@ export default function HomeContent() {
                 placeholder="E.g. Shopping list for birthday"
               ></input>
               <p>👋 Please provide a valid board title</p>
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <div className="line"></div>
               <div
                 style={{
@@ -266,6 +286,7 @@ export default function HomeContent() {
                   type="button"
                   className="closeBtn"
                   onClick={() => {
+                    setError("");
                     setIsOpen(false);
                     setSelectedBg(null);
                     setSelectedColor(null);
@@ -312,6 +333,7 @@ export default function HomeContent() {
               <p
                 style={{ cursor: "pointer" }}
                 onClick={() => {
+                  setError("");
                   setIsEditOpen(false);
                   setSelectedBg(null);
                   setSelectedColor(null);
@@ -356,6 +378,7 @@ export default function HomeContent() {
                 placeholder="E.g. Shopping list for birthday"
               ></input>
               <p>👋 Please provide a valid board title</p>
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <div className="line"></div>
               <div
                 style={{
@@ -370,6 +393,7 @@ export default function HomeContent() {
                   type="button"
                   className="closeBtn"
                   onClick={() => {
+                    setError("");
                     setIsEditOpen(false);
                     setSelectedBg(null);
                     setSelectedColor(null);

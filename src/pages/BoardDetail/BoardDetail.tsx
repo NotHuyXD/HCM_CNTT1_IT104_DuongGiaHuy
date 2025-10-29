@@ -41,6 +41,7 @@ export default function BoardDetail() {
   const [taskDetailModal, setTaskDetailModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<task | null>(null);
   const [descriptionValue, setDescriptionValue] = useState("");
+  const [error, setError] = useState("");
 
   async function getBoardData() {
     try {
@@ -114,10 +115,14 @@ export default function BoardDetail() {
       title: (e.target as any).listTitle.value,
       created_at: Date(),
     };
-    await axios.post(`${import.meta.env.VITE_SV_HOST}/lists`, newList);
-    await getListData();
-
-    setListModal(false);
+    if (newList.title == "") {
+      setError("Please input list title");
+    } else {
+      setError("");
+      await axios.post(`${import.meta.env.VITE_SV_HOST}/lists`, newList);
+      await getListData();
+      setListModal(false);
+    }
   }
 
   async function createTask(e: FormEvent) {
@@ -130,9 +135,14 @@ export default function BoardDetail() {
       due_date: Date(),
       created_at: Date(),
     };
-    await axios.post(`${import.meta.env.VITE_SV_HOST}/tasks`, newTask);
-    await getTaskData();
-    setTaskModal(false);
+    if (newTask.title == "") {
+      setError("Please input task title");
+    } else {
+      setError("");
+      await axios.post(`${import.meta.env.VITE_SV_HOST}/tasks`, newTask);
+      await getTaskData();
+      setTaskModal(false);
+    }
   }
 
   async function changeStarred() {
@@ -147,8 +157,13 @@ export default function BoardDetail() {
       color: selectedColor,
       content: e.target.labelTitle,
     };
-    await axios.post(`${import.meta.env.VITE_SV_HOST}/tags`, newLabel);
-    setCreateLabelModal(false);
+    if (newLabel.content == "") {
+      setError("Please input label title");
+    } else {
+      setError("");
+      await axios.post(`${import.meta.env.VITE_SV_HOST}/tags`, newLabel);
+      setCreateLabelModal(false);
+    }
   }
 
   return (
@@ -156,7 +171,12 @@ export default function BoardDetail() {
       <div id="titleBar">
         <div id="left">
           <h1>{boardData?.title}</h1>
-          <i className="fa-regular fa-star" onClick={changeStarred}></i>
+          <i
+            className={
+              boardData?.is_starred ? "fa-solid fa-star" : "fa-regular fa-star"
+            }
+            onClick={changeStarred}
+          ></i>
           <div className="titleButton">
             <i className="fa-solid fa-chart-simple"></i>
             <p>Board</p>
@@ -212,6 +232,7 @@ export default function BoardDetail() {
           <h5 onClick={() => setListModal(true)}>+ Add another list</h5>
         </div>
       </div>
+
       {taskDetailModal && selectedTask && (
         <div
           style={{
@@ -368,11 +389,10 @@ export default function BoardDetail() {
                   gap: "10px",
                 }}
               >
-                <button
+                <div
                   style={{
                     borderRadius: "6px",
                     width: "168px",
-                    padding: "10px",
                     border: "0",
                     textAlign: "left",
                     cursor: "pointer",
@@ -387,13 +407,15 @@ export default function BoardDetail() {
                     setLabels(res.data);
                   }}
                 >
-                  Label
-                </button>
-                <button
+                  <img
+                    src="../src/imgs/labelButton.png"
+                    style={{ width: "150px", height: "40px" }}
+                  />
+                </div>
+                <div
                   style={{
                     borderRadius: "6px",
                     width: "168px",
-                    padding: "10px",
                     border: "0",
                     textAlign: "left",
                     cursor: "pointer",
@@ -401,17 +423,17 @@ export default function BoardDetail() {
                   }}
                   onClick={() => setDateModal(true)}
                 >
-                  Date
-                </button>
-                <button
+                  <img
+                    src="../src/imgs/dateButton.png"
+                    style={{ width: "150px", height: "40px" }}
+                  />
+                </div>
+                <div
                   style={{
                     borderRadius: "6px",
                     width: "168px",
-                    padding: "10px",
-                    backgroundColor: "#c9372c",
                     border: "0",
                     textAlign: "left",
-                    color: "white",
                     cursor: "pointer",
                     fontWeight: "bold",
                   }}
@@ -419,13 +441,17 @@ export default function BoardDetail() {
                     setDeleteModal(true);
                   }}
                 >
-                  Delete
-                </button>
+                  <img
+                    src="../src/imgs/deleteButton.png"
+                    style={{ width: "150px", height: "40px" }}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
+
       {openFilter && (
         <div
           style={{
@@ -447,15 +473,17 @@ export default function BoardDetail() {
               flexDirection: "column",
               justifyContent: "center",
               background: "white",
-              padding: "50px",
+              padding: "20px",
               borderRadius: "8px",
               minWidth: "498px",
-              maxHeight: "80vh",
+              maxHeight: "90vh",
               overflowY: "auto",
             }}
           >
             <p>Filter</p>
-            <form>
+            <form
+              style={{ display: "flex", flexDirection: "column", gap: "1px" }}
+            >
               <div className="rowFlex">
                 <h5>Keyword</h5>
                 <p
@@ -751,6 +779,7 @@ export default function BoardDetail() {
             >
               <h1>Create new list</h1>
               <input type="text" name="listTitle"></input>
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <div className="rowFlex">
                 <button
                   type="submit"
@@ -768,7 +797,8 @@ export default function BoardDetail() {
                 <button
                   type="button"
                   onClick={() => {
-                    setTaskModal(false);
+                    setListModal(false);
+                    setError("");
                   }}
                   style={{
                     backgroundColor: "#dd3333",
@@ -819,6 +849,7 @@ export default function BoardDetail() {
             >
               <h1>Create new task</h1>
               <input type="text" name="taskTitle"></input>
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <div className="rowFlex">
                 <button
                   type="submit"
@@ -837,6 +868,7 @@ export default function BoardDetail() {
                   type="button"
                   onClick={() => {
                     setTaskModal(false);
+                    setError("");
                   }}
                   style={{
                     backgroundColor: "#dd3333",
@@ -896,7 +928,7 @@ export default function BoardDetail() {
                 <h2>Create Label</h2>
                 <p
                   style={{ cursor: "pointer", fontWeight: "bold" }}
-                  onClick={() => setCreateLabelModal(false)}
+                  onClick={() => {setCreateLabelModal(false);setError("")}}
                 >
                   X
                 </p>
@@ -908,7 +940,7 @@ export default function BoardDetail() {
                 name="labelTitle"
                 placeholder="Enter label name"
               />
-
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <label style={{ fontWeight: "bold" }}>Select color</label>
               <div
                 style={{
@@ -975,7 +1007,7 @@ export default function BoardDetail() {
                     padding: "12px 24px",
                     cursor: "pointer",
                   }}
-                  onClick={() => setCreateLabelModal(false)}
+                  onClick={() => {setCreateLabelModal(false);setError("")}}
                 >
                   Cancel
                 </button>

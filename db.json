@@ -74,11 +74,11 @@
     {
       "id": "3370",
       "userId": "ec02",
-      "title": "market",
+      "title": "marketing",
       "description": "",
-      "backdrop": "../src/imgs/background3.jpg",
+      "backdrop": "../src/imgs/background2.jpg",
       "is_starred": true,
-      "created_at": "Fri Oct 17 2025 09:34:29 GMT+0700 (Indochina Time)"
+      "created_at": "Tue Oct 28 2025 09:14:16 GMT+0700 (Indochina Time)"
     },
     {
       "id": "9f80",
@@ -97,6 +97,15 @@
       "backdrop": "../src/imgs/background3.jpg",
       "is_starred": false,
       "created_at": "Fri Oct 17 2025 08:56:58 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "7d84",
+      "userId": "ec02",
+      "title": "Music concert",
+      "description": "",
+      "backdrop": "../src/imgs/background1.jpg",
+      "is_starred": false,
+      "created_at": "Wed Oct 29 2025 07:29:15 GMT+0700 (Indochina Time)"
     }
   ],
   "lists": [

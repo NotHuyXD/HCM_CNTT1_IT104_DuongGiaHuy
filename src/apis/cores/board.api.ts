@@ -19,13 +19,4 @@ export const BoardApi={
         console.log("Loi tao board",res);
       });
     },
-
-    editBoard:async(data:board)=>{
-        await axios
-        .put(`${import.meta.env.VITE_SV_HOST}/boards/`+ data.id,data)
-        .then((res)=>console.log(res.data))
-        .catch((res)=>{
-            console.log("Loi edit",res)
-        })
-    }
 }
