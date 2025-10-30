@@ -175,7 +175,7 @@ export default function BoardDetail() {
             className={
               boardData?.is_starred ? "fa-solid fa-star" : "fa-regular fa-star"
             }
-            onClick={changeStarred}
+            onClick={async ()=>{changeStarred();await getBoardData()}}
           ></i>
           <div className="titleButton">
             <i className="fa-solid fa-chart-simple"></i>
@@ -357,6 +357,7 @@ export default function BoardDetail() {
                           status: selectedListValue,
                         }
                       );
+                      await getTaskData();
                       setTaskDetailModal(false);
                       setStatus(null);
                     }}

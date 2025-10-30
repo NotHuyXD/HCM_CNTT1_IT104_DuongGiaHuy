@@ -161,10 +161,10 @@
     },
     {
       "id": "t203",
-      "listId": "l103",
+      "listId": "l104",
       "title": "Phát triển API sản phẩm",
       "description": "<p>Tạo RESTful API cho danh sách sản phẩm, bao gồm chức năng thêm, sửa, xoá.</p>",
-      "status": "Hoàn thành",
+      "status": "Kiểm duyệt",
       "due_date": "Mon Oct 27 2025 15:00:00 GMT+0700 (Indochina Time)",
       "created_at": "Fri Oct 17 2025 09:47:25 GMT+0700 (Indochina Time)"
     },
@@ -172,8 +172,8 @@
       "id": "t204",
       "listId": "l102",
       "title": "Kết nối front-end với API",
-      "description": "Sử dụng Axios để gọi dữ liệu sản phẩm và hiển thị trên giao diện React.",
-      "status": "in-progress",
+      "description": "<p>Sử dụng Axios để gọi dữ liệu sản phẩm và hiển thị trên giao diện react</p>",
+      "status": null,
       "due_date": "Wed Oct 29 2025 09:00:00 GMT+0700 (Indochina Time)",
       "created_at": "Fri Oct 17 2025 09:48:10 GMT+0700 (Indochina Time)"
     },
