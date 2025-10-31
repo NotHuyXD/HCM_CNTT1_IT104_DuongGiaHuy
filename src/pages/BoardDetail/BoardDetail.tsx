@@ -260,8 +260,8 @@ export default function BoardDetail() {
           </div>
         ))}
 
-        <div id="addList">
-          <h5 onClick={() => setListModal(true)}>+ Add another list</h5>
+        <div id="addList" style={{cursor:"pointer"}} onClick={() => setListModal(true)}>
+          <h5>+ Add another list</h5>
         </div>
       </div>
 

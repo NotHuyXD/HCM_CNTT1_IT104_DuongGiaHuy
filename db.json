@@ -1,274 +1,270 @@
 {
-    "users": [{
-            "id": "ec08",
-            "username": "giahuy",
-            "email": "giahuy123@gmail.com",
-            "password": "123"
-        },
-        {
-            "id": "ec03",
-            "username": "NhatHao",
-            "email": "nhathao123@gmail.com",
-            "password": "123"
-        },
-        {
-            "id": "ec02",
-            "username": "HuyDuong",
-            "email": "giahuy2911@gmail.com",
-            "password": "123"
-        },
-        {
-            "id": "b8e3",
-            "username": "Gia Huy",
-            "email": "huygia1@gmail.com",
-            "password": "123"
-        },
-        {
-            "id": "581f",
-            "username": "huygia",
-            "email": "giahuy123456@gmail.com",
-            "password": "123"
-        }
-    ],
-    "boards": [{
-            "id": "101",
-            "userId": 1,
-            "title": "Dự án Website",
-            "description": "Quản lý tiến độ và thiết kế giao diện cho dự án website.",
-            "backdrop": "../src/imgs/background2.jpg",
-            "is_starred": true,
-            "created_at": "2025-02-28T12:30:00Z"
-        },
-        {
-            "id": "102",
-            "userId": 1,
-            "title": "Ứng dụng Quản lý Sự kiện",
-            "description": "Ứng dụng giúp tạo và theo dõi các sự kiện cá nhân hằng ngày.",
-            "backdrop": "../src/imgs/background1.jpg",
-            "is_starred": false,
-            "created_at": "2025-03-05T08:00:00Z"
-        },
-        {
-            "id": "103",
-            "userId": 2,
-            "title": "Dự án Mobile App",
-            "description": "Phát triển ứng dụng di động cho hệ thống đặt lịch hẹn khách hàng.",
-            "backdrop": "../src/imgs/background4.jpg",
-            "is_starred": false,
-            "created_at": "2025-03-10T09:45:00Z"
-        },
-        {
-            "id": "104",
-            "userId": 2,
-            "title": "Marketing Campaign Q1",
-            "description": "Theo dõi tiến độ và ngân sách chiến dịch quảng cáo quý I.",
-            "backdrop": "../src/imgs/background3.jpg",
-            "is_starred": true,
-            "created_at": "2025-03-15T11:20:00Z"
-        },
-        {
-            "id": "105",
-            "userId": 3,
-            "title": "Thiết kế UI/UX Dashboard",
-            "description": "Dự án nội bộ thiết kế lại giao diện bảng điều khiển quản trị.",
-            "backdrop": "../src/imgs/background2.jpg",
-            "is_starred": false,
-            "created_at": "2025-03-22T14:15:00Z"
-        },
-        {
-            "id": "3370",
-            "userId": "ec02",
-            "title": "marketing",
-            "description": "",
-            "backdrop": "../src/imgs/background2.jpg",
-            "is_starred": true,
-            "created_at": "Tue Oct 28 2025 09:14:16 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "9f80",
-            "userId": "ec08",
-            "title": "Xin chao",
-            "description": "",
-            "backdrop": "../src/imgs/background3.jpg",
-            "is_starred": false,
-            "created_at": "Fri Oct 17 2025 08:56:04 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "b9e9",
-            "userId": "ec08",
-            "title": "Lap trinh web",
-            "description": "",
-            "backdrop": "../src/imgs/background3.jpg",
-            "is_starred": false,
-            "created_at": "Fri Oct 17 2025 08:56:58 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "7d84",
-            "userId": "ec02",
-            "title": "Music concert",
-            "description": "",
-            "backdrop": "../src/imgs/background1.jpg",
-            "is_starred": false,
-            "created_at": "Wed Oct 29 2025 07:29:15 GMT+0700 (Indochina Time)"
-        }
-    ],
-    "lists": [{
-            "id": "l101",
-            "boardId": "3370",
-            "title": "Việc cần làm",
-            "created_at": "Fri Oct 17 2025 09:40:12 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "l102",
-            "boardId": "3370",
-            "title": "Đang thực hiện",
-            "created_at": "Fri Oct 17 2025 09:41:30 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "l103",
-            "boardId": "3370",
-            "title": "Hoàn thành",
-            "created_at": "Fri Oct 17 2025 09:42:10 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "l104",
-            "boardId": "3370",
-            "title": "Kiểm duyệt",
-            "created_at": "Fri Oct 17 2025 09:43:01 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "4cb8",
-            "boardId": "3370",
-            "title": "Todo",
-            "created_at": "Mon Oct 20 2025 08:54:58 GMT+0700 (Indochina Time)"
-        }
-    ],
-    "tasks": [{
-            "id": "t201",
-            "listId": "l101",
-            "title": "Phân tích nhu cầu khách hàng",
-            "description": "Thu thập thông tin từ các nhà bán hàng và người mua để xác định tính năng cần thiết cho hệ thống market.",
-            "status": "pending",
-            "due_date": "Tue Oct 21 2025 17:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:45:15 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t202",
-            "listId": "l101",
-            "title": "Thiết kế UI trang chủ",
-            "description": "Xây dựng wireframe và mockup cho trang market chính.",
-            "status": "pending",
-            "due_date": "Thu Oct 23 2025 10:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:46:10 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t203",
-            "listId": "l104",
-            "title": "Phát triển API sản phẩm",
-            "description": "<p>Tạo RESTful API cho danh sách sản phẩm, bao gồm chức năng thêm, sửa, xoá.</p>",
-            "status": "Kiểm duyệt",
-            "due_date": "Mon Oct 27 2025 15:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:47:25 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t204",
-            "listId": "l102",
-            "title": "Kết nối front-end với API",
-            "description": "<p>Sử dụng Axios để gọi dữ liệu sản phẩm và hiển thị trên giao diện react</p>",
-            "status": null,
-            "due_date": "Wed Oct 29 2025 09:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:48:10 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t205",
-            "listId": "l103",
-            "title": "Hoàn thiện giao diện giỏ hàng",
-            "description": "Tối ưu CSS và hiển thị tổng tiền, số lượng sản phẩm trong giỏ hàng.",
-            "status": "done",
-            "due_date": "Thu Oct 16 2025 16:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:49:05 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t206",
-            "listId": "l103",
-            "title": "Kiểm thử chức năng đặt hàng",
-            "description": "Thực hiện test manual các trường hợp đặt hàng thành công, thất bại, và xử lý lỗi.",
-            "status": "done",
-            "due_date": "Fri Oct 17 2025 09:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:49:50 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t207",
-            "listId": "l104",
-            "title": "Duyệt và đánh giá code",
-            "description": "Kiểm tra pull request từ nhóm dev, đảm bảo code sạch và tuân thủ chuẩn.",
-            "status": "review",
-            "due_date": "Sat Oct 18 2025 14:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:50:20 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "t208",
-            "listId": "l104",
-            "title": "Chuẩn bị tài liệu bàn giao",
-            "description": "Tổng hợp tài liệu API, hướng dẫn triển khai và bàn giao cho QA team.",
-            "status": "review",
-            "due_date": "Sun Oct 19 2025 18:00:00 GMT+0700 (Indochina Time)",
-            "created_at": "Fri Oct 17 2025 09:51:00 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "a58b",
-            "listId": "4cb8",
-            "title": "Homework",
-            "description": "",
-            "status": "Todo",
-            "due_date": "Thu Oct 23 2025 09:06:28 GMT+0700 (Indochina Time)",
-            "created_at": "Thu Oct 23 2025 09:06:28 GMT+0700 (Indochina Time)"
-        },
-        {
-            "id": "4fb1",
-            "listId": "l101",
-            "title": "Thue mc",
-            "description": "",
-            "status": "Việc cần làm",
-            "due_date": "Tue Oct 28 2025 08:27:46 GMT+0700 (Indochina Time)",
-            "created_at": "Tue Oct 28 2025 08:27:46 GMT+0700 (Indochina Time)"
-        }
-    ],
-    "tags": [{
-            "id": "tg1",
-            "taskId": "t203",
-            "content": "done",
-            "color": "#4caf50"
-        },
-        {
-            "id": "tg2",
-            "taskId": "t203",
-            "content": "urgent",
-            "color": "#ff9800"
-        },
-        {
-            "id": "tg3",
-            "taskId": "t203",
-            "content": "todo",
-            "color": "#f44336"
-        },
-        {
-            "id": "tg4",
-            "taskId": "t203",
-            "content": "in-progress",
-            "color": "#2196f3"
-        },
-        {
-            "taskId": "t204",
-            "color": "#ff9800",
-            "content": "ToDoList",
-            "id": "313c"
-        },
-        {
-            "taskId": "t204",
-            "color": "#f44336",
-            "content": "CompleteList",
-            "id": "b658"
-        }
-    ]
+  "users": [
+    {
+      "id": "ec08",
+      "username": "giahuy",
+      "email": "giahuy123@gmail.com",
+      "password": "123"
+    },
+    {
+      "id": "ec03",
+      "username": "NhatHao",
+      "email": "nhathao123@gmail.com",
+      "password": "123"
+    },
+    {
+      "id": "ec02",
+      "username": "HuyDuong",
+      "email": "giahuy2911@gmail.com",
+      "password": "123"
+    },
+    {
+      "id": "b8e3",
+      "username": "Gia Huy",
+      "email": "huygia1@gmail.com",
+      "password": "123"
+    },
+    {
+      "id": "581f",
+      "username": "huygia",
+      "email": "giahuy123456@gmail.com",
+      "password": "123"
+    }
+  ],
+  "boards": [
+    {
+      "id": "101",
+      "userId": 1,
+      "title": "Dự án Website",
+      "description": "Quản lý tiến độ và thiết kế giao diện cho dự án website.",
+      "backdrop": "../src/imgs/background2.jpg",
+      "is_starred": true,
+      "created_at": "2025-02-28T12:30:00Z"
+    },
+    {
+      "id": "102",
+      "userId": 1,
+      "title": "Ứng dụng Quản lý Sự kiện",
+      "description": "Ứng dụng giúp tạo và theo dõi các sự kiện cá nhân hằng ngày.",
+      "backdrop": "../src/imgs/background1.jpg",
+      "is_starred": false,
+      "created_at": "2025-03-05T08:00:00Z"
+    },
+    {
+      "id": "103",
+      "userId": 2,
+      "title": "Dự án Mobile App",
+      "description": "Phát triển ứng dụng di động cho hệ thống đặt lịch hẹn khách hàng.",
+      "backdrop": "../src/imgs/background4.jpg",
+      "is_starred": false,
+      "created_at": "2025-03-10T09:45:00Z"
+    },
+    {
+      "id": "104",
+      "userId": 2,
+      "title": "Marketing Campaign Q1",
+      "description": "Theo dõi tiến độ và ngân sách chiến dịch quảng cáo quý I.",
+      "backdrop": "../src/imgs/background3.jpg",
+      "is_starred": true,
+      "created_at": "2025-03-15T11:20:00Z"
+    },
+    {
+      "id": "105",
+      "userId": 3,
+      "title": "Thiết kế UI/UX Dashboard",
+      "description": "Dự án nội bộ thiết kế lại giao diện bảng điều khiển quản trị.",
+      "backdrop": "../src/imgs/background2.jpg",
+      "is_starred": false,
+      "created_at": "2025-03-22T14:15:00Z"
+    },
+    {
+      "id": "3370",
+      "userId": "ec02",
+      "title": "marketing",
+      "description": "",
+      "backdrop": "../src/imgs/background2.jpg",
+      "is_starred": true,
+      "created_at": "Tue Oct 28 2025 09:14:16 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "9f80",
+      "userId": "ec08",
+      "title": "Xin chao",
+      "description": "",
+      "backdrop": "../src/imgs/background3.jpg",
+      "is_starred": false,
+      "created_at": "Fri Oct 17 2025 08:56:04 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "b9e9",
+      "userId": "ec08",
+      "title": "Lap trinh web",
+      "description": "",
+      "backdrop": "../src/imgs/background3.jpg",
+      "is_starred": false,
+      "created_at": "Fri Oct 17 2025 08:56:58 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "7d84",
+      "userId": "ec02",
+      "title": "Music concert",
+      "description": "",
+      "backdrop": "../src/imgs/background1.jpg",
+      "is_starred": false,
+      "created_at": "Wed Oct 29 2025 07:29:15 GMT+0700 (Indochina Time)"
+    }
+  ],
+  "lists": [
+    {
+      "id": "l101",
+      "boardId": "3370",
+      "title": "Việc cần làm",
+      "created_at": "Fri Oct 17 2025 09:40:12 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "l102",
+      "boardId": "3370",
+      "title": "Đang thực hiện",
+      "created_at": "Fri Oct 17 2025 09:41:30 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "l103",
+      "boardId": "3370",
+      "title": "Hoàn thành",
+      "created_at": "Fri Oct 17 2025 09:42:10 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "l104",
+      "boardId": "3370",
+      "title": "Kiểm duyệt",
+      "created_at": "Fri Oct 17 2025 09:43:01 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "4cb8",
+      "boardId": "3370",
+      "title": "Todo",
+      "created_at": "Mon Oct 20 2025 08:54:58 GMT+0700 (Indochina Time)"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t202",
+      "listId": "l101",
+      "title": "Thiết kế UI trang chủ",
+      "description": "Xây dựng wireframe và mockup cho trang market chính.",
+      "status": "pending",
+      "due_date": "Thu Oct 23 2025 10:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:46:10 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "t203",
+      "listId": "l102",
+      "title": "Phát triển API sản phẩm",
+      "description": "<p>Tạo RESTful API cho danh sách sản phẩm, bao gồm chức năng thêm, sửa, xoá.</p>",
+      "status": "Đang thực hiện",
+      "due_date": "Mon Oct 27 2025 15:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:47:25 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "t204",
+      "listId": "l104",
+      "title": "Kết nối front-end với API",
+      "description": "<p>Sử dụng Axios để gọi dữ liệu sản phẩm và hiển thị trên giao diện react</p>",
+      "status": "Kiểm duyệt",
+      "due_date": "Wed Oct 29 2025 09:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:48:10 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "t205",
+      "listId": "l103",
+      "title": "Hoàn thiện giao diện giỏ hàng",
+      "description": "Tối ưu CSS và hiển thị tổng tiền, số lượng sản phẩm trong giỏ hàng.",
+      "status": "done",
+      "due_date": "Thu Oct 16 2025 16:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:49:05 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "t206",
+      "listId": "l103",
+      "title": "Kiểm thử chức năng đặt hàng",
+      "description": "Thực hiện test manual các trường hợp đặt hàng thành công, thất bại, và xử lý lỗi.",
+      "status": "done",
+      "due_date": "Fri Oct 17 2025 09:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:49:50 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "t207",
+      "listId": "l104",
+      "title": "Duyệt và đánh giá code",
+      "description": "Kiểm tra pull request từ nhóm dev, đảm bảo code sạch và tuân thủ chuẩn.",
+      "status": "review",
+      "due_date": "Sat Oct 18 2025 14:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:50:20 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "t208",
+      "listId": "l104",
+      "title": "Chuẩn bị tài liệu bàn giao",
+      "description": "Tổng hợp tài liệu API, hướng dẫn triển khai và bàn giao cho QA team.",
+      "status": "review",
+      "due_date": "Sun Oct 19 2025 18:00:00 GMT+0700 (Indochina Time)",
+      "created_at": "Fri Oct 17 2025 09:51:00 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "a58b",
+      "listId": "4cb8",
+      "title": "Homework",
+      "description": "",
+      "status": "Todo",
+      "due_date": "Thu Oct 23 2025 09:06:28 GMT+0700 (Indochina Time)",
+      "created_at": "Thu Oct 23 2025 09:06:28 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "4fb1",
+      "listId": "l101",
+      "title": "Thue mc",
+      "description": "",
+      "status": "Việc cần làm",
+      "due_date": "Tue Oct 28 2025 08:27:46 GMT+0700 (Indochina Time)",
+      "created_at": "Tue Oct 28 2025 08:27:46 GMT+0700 (Indochina Time)"
+    }
+  ],
+  "tags": [
+    {
+      "id": "tg1",
+      "taskId": "t203",
+      "content": "done",
+      "color": "#4caf50"
+    },
+    {
+      "id": "tg2",
+      "taskId": "t203",
+      "content": "urgent",
+      "color": "#ff9800"
+    },
+    {
+      "id": "tg3",
+      "taskId": "t203",
+      "content": "todo",
+      "color": "#f44336"
+    },
+    {
+      "id": "tg4",
+      "taskId": "t203",
+      "content": "in-progress",
+      "color": "#2196f3"
+    },
+    {
+      "taskId": "t204",
+      "color": "#ff9800",
+      "content": "ToDoList",
+      "id": "313c"
+    },
+    {
+      "taskId": "t204",
+      "color": "#f44336",
+      "content": "CompleteList",
+      "id": "b658"
+    }
+  ]
 }

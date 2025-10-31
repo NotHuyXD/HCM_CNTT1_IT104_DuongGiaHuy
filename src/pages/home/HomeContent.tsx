@@ -81,8 +81,7 @@ export default function HomeContent() {
     };
     if (newData.title == "") {
       setError("Please input a valid title");
-    } 
-    else {
+    } else {
       setError("");
       await Apis.board.createBoard(newData);
       await getBoards();
@@ -134,19 +133,18 @@ export default function HomeContent() {
         <div className="line"></div>
         <div className="cardList">
           {workSpace.map((board) => (
-            <div className="boardCard">
+            <div
+              key={board.id}
+              className="boardCard"
+              onClick={() => (window.location.href = `/home/${board.id}`)}
+              style={{ cursor: "pointer" }}
+            >
               <img src={board.backdrop} alt="Board background" />
-              <h3
-                className="cardTitle"
-                onClick={() => {
-                  window.location.href = `/home/${board.id}`;
-                }}
-              >
-                {board.title}
-              </h3>
+              <h3 className="cardTitle">{board.title}</h3>
               <button
                 className="editBtn"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation(); // 🔥 chặn click lan lên div cha
                   setIsEditOpen(true);
                   setEditId(board.id);
                   setTitleEdit(board.title);
@@ -157,9 +155,10 @@ export default function HomeContent() {
               </button>
             </div>
           ))}
+
           <div id="addCard">
             <button type="button" onClick={() => setIsOpen(true)}>
-              Create New Card
+              Create New Board
             </button>
           </div>
         </div>
@@ -171,19 +170,18 @@ export default function HomeContent() {
         <div className="line"></div>
         <div className="cardList">
           {starredBoard.map((board) => (
-            <div className="boardCard">
+            <div
+              key={board.id}
+              className="boardCard"
+              onClick={() => (window.location.href = `/home/${board.id}`)}
+              style={{ cursor: "pointer" }}
+            >
               <img src={board.backdrop} alt="Board background" />
-              <h3
-                className="cardTitle"
-                onClick={() => {
-                  window.location.href = `/home/${board.id}`;
-                }}
-              >
-                {board.title}
-              </h3>
+              <h3 className="cardTitle">{board.title}</h3>
               <button
                 className="editBtn"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setIsEditOpen(true);
                   setEditId(board.id);
                   setTitleEdit(board.title);
