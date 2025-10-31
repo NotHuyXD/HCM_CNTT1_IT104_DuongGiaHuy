@@ -32,7 +32,10 @@ export default function BoardDetail() {
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [dateFilter, setDateFilter] = useState<string | null>(null);
   const [labelFilter, setLabelFilter] = useState<string | null>(null);
+  const [labelTitle, setLabelTitle] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [editLabelModal, setEditLabelModal] = useState(false);
+  const [labelId, setLabelId] = useState<string | null>(null);
   const [selectedLabel, setSelectedLabel] = useState(null);
   const [labels, setLabels] = useState<tag[] | null>(null);
   const [selectedListValue, setSelectedListValue] = useState<string | null>(
@@ -151,18 +154,44 @@ export default function BoardDetail() {
     });
   }
 
-  async function createLabel(e) {
+  async function createLabel() {
     const newLabel = {
       taskId: selectedTask?.id,
       color: selectedColor,
-      content: e.target.labelTitle,
+      content: labelTitle,
     };
     if (newLabel.content == "") {
       setError("Please input label title");
     } else {
       setError("");
       await axios.post(`${import.meta.env.VITE_SV_HOST}/tags`, newLabel);
+      const res = await axios.get(
+        `${import.meta.env.VITE_SV_HOST}/tags?taskId=` + selectedTask.id
+      );
+      setLabels(res.data);
       setCreateLabelModal(false);
+    }
+  }
+
+  async function editLabel() {
+    const newLabel = {
+      taskId: selectedTask?.id,
+      color: selectedColor,
+      content: labelTitle,
+    };
+    if (newLabel.content == "") {
+      setError("Please input label title");
+    } else {
+      setError("");
+      await axios.put(
+        `${import.meta.env.VITE_SV_HOST}/tags/` + labelId,
+        newLabel
+      );
+      const res = await axios.get(
+        `${import.meta.env.VITE_SV_HOST}/tags?taskId=` + selectedTask.id
+      );
+      setLabels(res.data);
+      setEditLabelModal(false);
     }
   }
 
@@ -175,7 +204,10 @@ export default function BoardDetail() {
             className={
               boardData?.is_starred ? "fa-solid fa-star" : "fa-regular fa-star"
             }
-            onClick={async ()=>{changeStarred();await getBoardData()}}
+            onClick={async () => {
+              changeStarred();
+              await getBoardData();
+            }}
           ></i>
           <div className="titleButton">
             <i className="fa-solid fa-chart-simple"></i>
@@ -929,7 +961,10 @@ export default function BoardDetail() {
                 <h2>Create Label</h2>
                 <p
                   style={{ cursor: "pointer", fontWeight: "bold" }}
-                  onClick={() => {setCreateLabelModal(false);setError("")}}
+                  onClick={() => {
+                    setCreateLabelModal(false);
+                    setError("");
+                  }}
                 >
                   X
                 </p>
@@ -939,6 +974,8 @@ export default function BoardDetail() {
               <input
                 type="text"
                 name="labelTitle"
+                value={labelTitle}
+                onChange={(e) => setLabelTitle(e.target.value)}
                 placeholder="Enter label name"
               />
               {error && <p style={{ color: "red" }}>{error}</p>}
@@ -1008,7 +1045,10 @@ export default function BoardDetail() {
                     padding: "12px 24px",
                     cursor: "pointer",
                   }}
-                  onClick={() => {setCreateLabelModal(false);setError("")}}
+                  onClick={() => {
+                    setCreateLabelModal(false);
+                    setError("");
+                  }}
                 >
                   Cancel
                 </button>
@@ -1017,6 +1057,146 @@ export default function BoardDetail() {
           </div>
         </div>
       )}
+
+      {editLabelModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: "999",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              background: "white",
+              padding: "50px",
+              borderRadius: "8px",
+              minWidth: "498px",
+            }}
+          >
+            <form
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+                width: "100%",
+              }}
+            >
+              <div
+                className="rowFlex"
+                style={{ justifyContent: "space-between" }}
+              >
+                <h2>Edit Label</h2>
+                <p
+                  style={{ cursor: "pointer", fontWeight: "bold" }}
+                  onClick={() => {
+                    setEditLabelModal(false);
+                    setError("");
+                  }}
+                >
+                  X
+                </p>
+              </div>
+
+              <label style={{ fontWeight: "bold" }}>Title</label>
+              <input
+                type="text"
+                name="labelTitle"
+                value={labelTitle}
+                onChange={(e) => setLabelTitle(e.target.value)}
+                placeholder="Enter label name"
+              />
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              <label style={{ fontWeight: "bold" }}>Select color</label>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, 1fr)",
+                  gap: "10px",
+                }}
+              >
+                {[
+                  "#4caf50",
+                  "#ff9800",
+                  "#f44336",
+                  "#2196f3",
+                  "#9c27b0",
+                  "#ffc107",
+                  "#03a9f4",
+                  "#8bc34a",
+                  "#e91e63",
+                  "#795548",
+                ].map((color) => (
+                  <div
+                    key={color}
+                    className={`colorBox ${
+                      selectedColor === color ? "selectedColor" : ""
+                    }`}
+                    style={{
+                      width: "92px",
+                      height: "42px",
+                      backgroundColor: color,
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      border: "1px solid #ddd",
+                    }}
+                    onClick={() => setSelectedColor(color)}
+                  ></div>
+                ))}
+              </div>
+
+              <div
+                className="rowFlex"
+                style={{ justifyContent: "flex-end", gap: "10px" }}
+              >
+                <button
+                  type="button"
+                  style={{
+                    backgroundColor: "#3085d6",
+                    color: "white",
+                    borderRadius: "8px",
+                    border: "0",
+                    padding: "12px 24px",
+                    cursor: "pointer",
+                  }}
+                  onClick={editLabel}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    backgroundColor: "#dd3333",
+                    color: "white",
+                    borderRadius: "8px",
+                    border: "0",
+                    padding: "12px 24px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setCreateLabelModal(false);
+                    setError("");
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {labelModal && (
         <div
           style={{
@@ -1122,7 +1302,15 @@ export default function BoardDetail() {
                     </div>
                   </div>
 
-                  <span style={{ cursor: "pointer", marginLeft: "10px" }}>
+                  <span
+                    style={{ cursor: "pointer", marginLeft: "10px" }}
+                    onClick={() => {
+                      setLabelTitle(label.content);
+                      setSelectedColor(label.color);
+                      setLabelId(label.id);
+                      setEditLabelModal(true);
+                    }}
+                  >
                     ✏️
                   </span>
                 </div>
