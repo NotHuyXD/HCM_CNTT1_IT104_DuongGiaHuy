@@ -2,19 +2,29 @@ import React from "react";
 import { Route, Routes } from "react-router";
 import SignUp from "./pages/auth/signup";
 import SignIn from "./pages/auth/signin";
-import Home from "./pages/home/home";
-import HomeContent from "./pages/home/HomeContent";
-import BoardDetail from "./pages/BoardDetail/BoardDetail";
+import Admin from "./pages/Admin/home/Admin";
+import AdminContent from "./pages/Admin/home/AdminContent";
+import AdminDetail from "./pages/Admin/AdminDetail/AdminDetail";
+import SignInAdmin from "./pages/auth/signinAdmin";
+import UserManagement from "./pages/Admin/ManageUser/manageUser";
+import CoursesPage from "./pages/User/UserHome";
+import LearnPage from "./pages/User/CourseDetail";
+import Quiz from "./pages/User/Quiz";
 
 export default function RouteConfig() {
   return (
     <Routes>
-      <Route path="/home" element={<Home />}>
-        <Route path="/home" element={<HomeContent />}></Route>
-        <Route path="/home/:boardId" element={<BoardDetail/>}></Route>
+      <Route path="/loginAdmin" element={<SignInAdmin/>}></Route>
+      <Route path="/admin" element={<Admin />}>
+        <Route path="/admin" element={<AdminContent />}></Route>
+        <Route path="/admin/:courseId" element={<AdminDetail/>}></Route>
+        <Route path="/admin/manageUser" element={<UserManagement/>}></Route>
       </Route>
       <Route path="/" element={<SignIn />}></Route>
       <Route path="signup" element={<SignUp />}></Route>
+      <Route path="/home" element={<CoursesPage/>}></Route>
+      <Route path="/course/:courseId" element={<LearnPage/>}></Route>
+      <Route path="/exam" element={<Quiz/>}></Route>
     </Routes>
   );
 }

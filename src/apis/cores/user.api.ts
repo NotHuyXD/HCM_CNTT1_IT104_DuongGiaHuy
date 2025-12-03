@@ -7,6 +7,7 @@ export interface userData {
   username: string;
   email: string;
   password: string;
+  role:string,
 }
 
 export interface loginData {
@@ -31,7 +32,7 @@ export const UserApi = {
         return res.data;
       })
       .catch((res) => {
-        console.log("Loi dang ky",res);
+        console.log("Loi dang ky", res);
       });
     return newUser;
   },
@@ -42,14 +43,45 @@ export const UserApi = {
     );
     if (result.data.length == 0) {
       throw {
-        data:null,
+        data: null,
         message: "Tai khoan ko ton tai",
       };
     } else {
       if (result.data[0].password != data.password) {
         throw {
-          data:null,
+          data: null,
           message: "Mat khau ko chinh xac",
+        };
+      } else if (result.data[0].role == "admin") {
+        throw {
+          data: null,
+          message: "Vai tro ko chinh xac",
+        };
+      } else {
+        return createToken(result.data[0].id);
+      }
+    }
+  },
+
+    signInAdmin: async (data: loginData) => {
+    let result = await axios.get(
+      `${import.meta.env.VITE_SV_HOST}/users?email=` + data.email
+    );
+    if (result.data.length == 0) {
+      throw {
+        data: null,
+        message: "Tai khoan ko ton tai",
+      };
+    } else {
+      if (result.data[0].password != data.password) {
+        throw {
+          data: null,
+          message: "Mat khau ko chinh xac",
+        };
+      } else if (result.data[0].role != "admin") {
+        throw {
+          data: null,
+          message: "Vai tro ko chinh xac",
         };
       } else {
         return createToken(result.data[0].id);

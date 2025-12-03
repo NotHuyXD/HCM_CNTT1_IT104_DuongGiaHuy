@@ -1,270 +1,390 @@
 {
-  "users": [
-    {
-      "id": "ec08",
-      "username": "giahuy",
-      "email": "giahuy123@gmail.com",
-      "password": "123"
-    },
-    {
-      "id": "ec03",
-      "username": "NhatHao",
-      "email": "nhathao123@gmail.com",
-      "password": "123"
-    },
-    {
-      "id": "ec02",
-      "username": "HuyDuong",
-      "email": "giahuy2911@gmail.com",
-      "password": "123"
-    },
-    {
-      "id": "b8e3",
-      "username": "Gia Huy",
-      "email": "huygia1@gmail.com",
-      "password": "123"
-    },
-    {
-      "id": "581f",
-      "username": "huygia",
-      "email": "giahuy123456@gmail.com",
-      "password": "123"
-    }
-  ],
-  "boards": [
-    {
-      "id": "101",
-      "userId": 1,
-      "title": "Dự án Website",
-      "description": "Quản lý tiến độ và thiết kế giao diện cho dự án website.",
-      "backdrop": "../src/imgs/background2.jpg",
-      "is_starred": true,
-      "created_at": "2025-02-28T12:30:00Z"
-    },
-    {
-      "id": "102",
-      "userId": 1,
-      "title": "Ứng dụng Quản lý Sự kiện",
-      "description": "Ứng dụng giúp tạo và theo dõi các sự kiện cá nhân hằng ngày.",
-      "backdrop": "../src/imgs/background1.jpg",
-      "is_starred": false,
-      "created_at": "2025-03-05T08:00:00Z"
-    },
-    {
-      "id": "103",
-      "userId": 2,
-      "title": "Dự án Mobile App",
-      "description": "Phát triển ứng dụng di động cho hệ thống đặt lịch hẹn khách hàng.",
-      "backdrop": "../src/imgs/background4.jpg",
-      "is_starred": false,
-      "created_at": "2025-03-10T09:45:00Z"
-    },
-    {
-      "id": "104",
-      "userId": 2,
-      "title": "Marketing Campaign Q1",
-      "description": "Theo dõi tiến độ và ngân sách chiến dịch quảng cáo quý I.",
-      "backdrop": "../src/imgs/background3.jpg",
-      "is_starred": true,
-      "created_at": "2025-03-15T11:20:00Z"
-    },
-    {
-      "id": "105",
-      "userId": 3,
-      "title": "Thiết kế UI/UX Dashboard",
-      "description": "Dự án nội bộ thiết kế lại giao diện bảng điều khiển quản trị.",
-      "backdrop": "../src/imgs/background2.jpg",
-      "is_starred": false,
-      "created_at": "2025-03-22T14:15:00Z"
-    },
-    {
-      "id": "3370",
-      "userId": "ec02",
-      "title": "marketing",
-      "description": "",
-      "backdrop": "../src/imgs/background2.jpg",
-      "is_starred": true,
-      "created_at": "Tue Oct 28 2025 09:14:16 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "9f80",
-      "userId": "ec08",
-      "title": "Xin chao",
-      "description": "",
-      "backdrop": "../src/imgs/background3.jpg",
-      "is_starred": false,
-      "created_at": "Fri Oct 17 2025 08:56:04 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "b9e9",
-      "userId": "ec08",
-      "title": "Lap trinh web",
-      "description": "",
-      "backdrop": "../src/imgs/background3.jpg",
-      "is_starred": false,
-      "created_at": "Fri Oct 17 2025 08:56:58 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "7d84",
-      "userId": "ec02",
-      "title": "Music concert",
-      "description": "",
-      "backdrop": "../src/imgs/background1.jpg",
-      "is_starred": false,
-      "created_at": "Wed Oct 29 2025 07:29:15 GMT+0700 (Indochina Time)"
-    }
-  ],
-  "lists": [
-    {
-      "id": "l101",
-      "boardId": "3370",
-      "title": "Việc cần làm",
-      "created_at": "Fri Oct 17 2025 09:40:12 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "l102",
-      "boardId": "3370",
-      "title": "Đang thực hiện",
-      "created_at": "Fri Oct 17 2025 09:41:30 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "l103",
-      "boardId": "3370",
-      "title": "Hoàn thành",
-      "created_at": "Fri Oct 17 2025 09:42:10 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "l104",
-      "boardId": "3370",
-      "title": "Kiểm duyệt",
-      "created_at": "Fri Oct 17 2025 09:43:01 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "4cb8",
-      "boardId": "3370",
-      "title": "Todo",
-      "created_at": "Mon Oct 20 2025 08:54:58 GMT+0700 (Indochina Time)"
-    }
-  ],
-  "tasks": [
-    {
-      "id": "t202",
-      "listId": "l101",
-      "title": "Thiết kế UI trang chủ",
-      "description": "Xây dựng wireframe và mockup cho trang market chính.",
-      "status": "pending",
-      "due_date": "Thu Oct 23 2025 10:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:46:10 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "t203",
-      "listId": "l102",
-      "title": "Phát triển API sản phẩm",
-      "description": "<p>Tạo RESTful API cho danh sách sản phẩm, bao gồm chức năng thêm, sửa, xoá.</p>",
-      "status": "Đang thực hiện",
-      "due_date": "Mon Oct 27 2025 15:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:47:25 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "t204",
-      "listId": "l104",
-      "title": "Kết nối front-end với API",
-      "description": "<p>Sử dụng Axios để gọi dữ liệu sản phẩm và hiển thị trên giao diện react</p>",
-      "status": "Kiểm duyệt",
-      "due_date": "Wed Oct 29 2025 09:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:48:10 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "t205",
-      "listId": "l103",
-      "title": "Hoàn thiện giao diện giỏ hàng",
-      "description": "Tối ưu CSS và hiển thị tổng tiền, số lượng sản phẩm trong giỏ hàng.",
-      "status": "done",
-      "due_date": "Thu Oct 16 2025 16:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:49:05 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "t206",
-      "listId": "l103",
-      "title": "Kiểm thử chức năng đặt hàng",
-      "description": "Thực hiện test manual các trường hợp đặt hàng thành công, thất bại, và xử lý lỗi.",
-      "status": "done",
-      "due_date": "Fri Oct 17 2025 09:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:49:50 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "t207",
-      "listId": "l104",
-      "title": "Duyệt và đánh giá code",
-      "description": "Kiểm tra pull request từ nhóm dev, đảm bảo code sạch và tuân thủ chuẩn.",
-      "status": "review",
-      "due_date": "Sat Oct 18 2025 14:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:50:20 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "t208",
-      "listId": "l104",
-      "title": "Chuẩn bị tài liệu bàn giao",
-      "description": "Tổng hợp tài liệu API, hướng dẫn triển khai và bàn giao cho QA team.",
-      "status": "review",
-      "due_date": "Sun Oct 19 2025 18:00:00 GMT+0700 (Indochina Time)",
-      "created_at": "Fri Oct 17 2025 09:51:00 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "a58b",
-      "listId": "4cb8",
-      "title": "Homework",
-      "description": "",
-      "status": "Todo",
-      "due_date": "Thu Oct 23 2025 09:06:28 GMT+0700 (Indochina Time)",
-      "created_at": "Thu Oct 23 2025 09:06:28 GMT+0700 (Indochina Time)"
-    },
-    {
-      "id": "4fb1",
-      "listId": "l101",
-      "title": "Thue mc",
-      "description": "",
-      "status": "Việc cần làm",
-      "due_date": "Tue Oct 28 2025 08:27:46 GMT+0700 (Indochina Time)",
-      "created_at": "Tue Oct 28 2025 08:27:46 GMT+0700 (Indochina Time)"
-    }
-  ],
-  "tags": [
-    {
-      "id": "tg1",
-      "taskId": "t203",
-      "content": "done",
-      "color": "#4caf50"
-    },
-    {
-      "id": "tg2",
-      "taskId": "t203",
-      "content": "urgent",
-      "color": "#ff9800"
-    },
-    {
-      "id": "tg3",
-      "taskId": "t203",
-      "content": "todo",
-      "color": "#f44336"
-    },
-    {
-      "id": "tg4",
-      "taskId": "t203",
-      "content": "in-progress",
-      "color": "#2196f3"
-    },
-    {
-      "taskId": "t204",
-      "color": "#ff9800",
-      "content": "ToDoList",
-      "id": "313c"
-    },
-    {
-      "taskId": "t204",
-      "color": "#f44336",
-      "content": "CompleteList",
-      "id": "b658"
-    }
-  ]
+    "users": [{
+            "id": "ec08",
+            "username": "giahuy",
+            "email": "giahuy123@gmail.com",
+            "password": "123",
+            "role": "admin",
+            "status": true
+        },
+        {
+            "id": "ec03",
+            "username": "NhatHao",
+            "email": "nhathao123@gmail.com",
+            "password": "123",
+            "role": "admin",
+            "status": true
+        },
+        {
+            "id": "ec02",
+            "username": "HuyDuong",
+            "email": "giahuy2911@gmail.com",
+            "password": "123",
+            "role": "admin",
+            "status": true
+        },
+        {
+            "id": "b8e3",
+            "username": "Gia Huy",
+            "email": "huygia1@gmail.com",
+            "password": "123",
+            "role": "user",
+            "status": true
+        },
+        {
+            "id": "581f",
+            "username": "huygia",
+            "email": "giahuy123456@gmail.com",
+            "password": "123",
+            "role": "user",
+            "status": true
+        }
+    ],
+    "courses": [{
+            "id": "101",
+            "title": "Khóa học Lập trình Web cơ bản",
+            "backdrop": "../src/imgs/background.png",
+            "type": "course"
+        },
+        {
+            "id": "102",
+            "title": "Khóa học Phát triển Ứng dụng Di động",
+            "backdrop": "../src/imgs/background.png",
+            "type": "Mobile"
+        },
+        {
+            "id": "103",
+            "title": "Khóa học Phân tích Dữ liệu",
+            "backdrop": "../src/imgs/background.png",
+            "type": "Data Science"
+        },
+        {
+            "id": "104",
+            "title": "Khóa học Marketing số",
+            "backdrop": "../src/imgs/background.png",
+            "type": "Marketing"
+        },
+        {
+            "id": "105",
+            "title": "Khóa học Thiết kế UI/UX",
+            "backdrop": "../src/imgs/background.png",
+            "type": "Design"
+        },
+        {
+            "id": "9f80",
+            "title": "Khóa học Tiếng Anh Giao tiếp",
+            "backdrop": "../src/imgs/background.png",
+            "type": "Language"
+        },
+        {
+            "id": "b9e9",
+            "title": "Khóa học Lập trình Web",
+            "backdrop": "../src/imgs/background.png",
+            "type": "Backend"
+        },
+        {
+            "id": "edb2",
+            "title": "IT TALK",
+            "backdrop": "../src/imgs/background.png",
+            "type": "course"
+        },
+        {
+            "id": "29ec",
+            "title": "IT MODIFI",
+            "backdrop": "../src/imgs/background.png",
+            "type": "course"
+        }
+    ],
+    "sessions": [{
+            "id": "l101",
+            "courseId": "101",
+            "title": "Module 1: Kiến thức cơ bản"
+        },
+        {
+            "id": "l102",
+            "courseId": "101",
+            "title": "Module 2: Thực hành Frontend"
+        },
+        {
+            "id": "l103",
+            "courseId": "102",
+            "title": "Module 3: Hoàn thiện dự án"
+        },
+        {
+            "id": "l104",
+            "courseId": "102",
+            "title": "Module 4: Kiểm tra đánh giá"
+        },
+        {
+            "id": "4cb8",
+            "courseId": "103",
+            "title": "Module Lý thuyết"
+        },
+        {
+            "id": "ed80",
+            "courseId": "104",
+            "title": "Module Ôn tập"
+        },
+        {
+            "id": "7f1f",
+            "courseId": "105",
+            "title": "Module Nâng cao"
+        },
+        {
+            "id": "df3e",
+            "courseId": "29ec",
+            "title": "det",
+            "created_at": "Tue Dec 02 2025 12:14:23 GMT+0700 (Indochina Time)"
+        },
+        {
+            "id": "2e09",
+            "courseId": "29ec",
+            "title": "MOdule2"
+        }
+    ],
+    "lessons": [{
+            "id": "tg1",
+            "sessionId": 102,
+            "title": "Bài tập 2",
+            "content": "Phát triển API"
+        },
+        {
+            "id": "tg2",
+            "sessionId": 102,
+            "title": "Quan trọng",
+            "content": "Cần hoàn thành gấp"
+        },
+        {
+            "id": "tg3",
+            "sessionId": 104,
+            "title": "Bài tập",
+            "content": "Kết nối API"
+        },
+        {
+            "id": "tg4",
+            "sessionId": 103,
+            "title": "Hoàn thiện",
+            "content": "Giao diện giỏ hàng"
+        },
+        {
+            "id": "313c",
+            "sessionId": 104,
+            "title": "Duyệt code",
+            "content": "Đánh giá PR"
+        },
+        {
+            "id": "2319",
+            "sessionId": 5693,
+            "title": "ls1",
+            "content": "",
+            "status": "det",
+            "due_date": "Tue Dec 02 2025 09:48:02 GMT+0700 (Indochina Time)",
+            "created_at": "Tue Dec 02 2025 09:48:02 GMT+0700 (Indochina Time)"
+        },
+        {
+            "id": "8c83",
+            "sessionId": null,
+            "title": "Homework",
+            "content": "",
+            "status": "Module 2: Thực hành Frontend",
+            "due_date": "Tue Dec 02 2025 12:14:07 GMT+0700 (Indochina Time)",
+            "created_at": "Tue Dec 02 2025 12:14:07 GMT+0700 (Indochina Time)"
+        },
+        {
+            "id": "5f4c",
+            "sessionId": null,
+            "title": "Thue mc",
+            "content": "",
+            "status": "Module 2: Thực hành Frontend",
+            "due_date": "Tue Dec 02 2025 12:14:12 GMT+0700 (Indochina Time)",
+            "created_at": "Tue Dec 02 2025 12:14:12 GMT+0700 (Indochina Time)"
+        },
+        {
+            "id": "f2d0",
+            "sessionId": null,
+            "title": "Homework",
+            "content": "",
+            "status": "det",
+            "due_date": "Tue Dec 02 2025 12:14:26 GMT+0700 (Indochina Time)",
+            "created_at": "Tue Dec 02 2025 12:14:26 GMT+0700 (Indochina Time)"
+        },
+        {
+            "id": "f2af",
+            "sessionId": "df3e",
+            "title": "Homework",
+            "content": ""
+        },
+        {
+            "id": "3ddf",
+            "sessionId": "df3e",
+            "title": "Todo",
+            "content": ""
+        },
+        {
+            "id": "05a3",
+            "sessionId": "2e09",
+            "title": "ls1",
+            "content": ""
+        },
+        {
+            "id": "c206",
+            "sessionId": null,
+            "title": "ls2",
+            "content": "",
+            "status": "Module 2: Thực hành Frontend"
+        },
+        {
+            "id": "5f15",
+            "sessionId": "l101",
+            "title": "ls1",
+            "content": "<iframe class=\"ql-video\" frameborder=\"0\" allowfullscreen=\"true\" src=\"https://www.youtube.com/embed/IevmdO16GuE?showinfo=0\"></iframe><p><br></p>"
+        },
+        {
+            "id": "1c9a",
+            "sessionId": "7f1f",
+            "title": "ls1",
+            "content": ""
+        }
+    ],
+    "questions": [{
+            "id": 1,
+            "question": "Trong React, Hook nào được sử dụng để quản lý trạng thái cục bộ trong một functional component?",
+            "options": ["useState", "useEffect", "useContext", "useReducer"],
+            "answer": "useState",
+            "topic": "React"
+        },
+        {
+            "id": 2,
+            "question": "HTML element nào được sử dụng để định nghĩa một khối nội dung độc lập, như một bài viết blog?",
+            "options": ["<section>", "<article>", "<aside>", "<div>"],
+            "answer": "<article>",
+            "topic": "HTML"
+        },
+        {
+            "id": 3,
+            "question": "Thuộc tính CSS nào kiểm soát khoảng cách giữa nội dung của element và border của nó?",
+            "options": ["margin", "padding", "border-spacing", "outline"],
+            "answer": "padding",
+            "topic": "CSS"
+        },
+        {
+            "id": 4,
+            "question": "Phương thức JavaScript nào dùng để thêm một hoặc nhiều phần tử vào cuối một mảng và trả về độ dài mới của mảng?",
+            "options": ["slice()", "splice()", "push()", "pop()"],
+            "answer": "push()",
+            "topic": "JavaScript"
+        },
+        {
+            "id": 5,
+            "question": "Trong React, làm thế nào để truyền dữ liệu từ component cha xuống component con?",
+            "options": ["Sử dụng state", "Sử dụng props", "Sử dụng ref", "Sử dụng context provider"],
+            "answer": "Sử dụng props",
+            "topic": "React"
+        },
+        {
+            "id": 6,
+            "question": "Thuộc tính 'defer' trong thẻ <script> có tác dụng gì?",
+            "options": ["Tải script không đồng bộ và thực thi ngay lập tức.", "Tải script sau khi tài liệu HTML được phân tích cú pháp hoàn toàn.", "Ngăn chặn script tải.", "Buộc script phải được tải từ bộ nhớ cache."],
+            "answer": "Tải script sau khi tài liệu HTML được phân tích cú pháp hoàn toàn.",
+            "topic": "HTML"
+        },
+        {
+            "id": 7,
+            "question": "Để làm cho một element nằm giữa theo chiều ngang trong CSS (khi nó có chiều rộng cố định), ta dùng thuộc tính nào?",
+            "options": ["align-items: center;", "text-align: center;", "margin: auto;", "justify-content: center;"],
+            "answer": "margin: auto;",
+            "topic": "CSS"
+        },
+        {
+            "id": 8,
+            "question": "Sự khác biệt chính giữa 'let' và 'var' trong JavaScript là gì?",
+            "options": ["'let' là global scope, 'var' là block scope.", "'var' có thể được khai báo lại, 'let' thì không.", "'let' bị hoisting, 'var' thì không.", "'var' là block scope, 'let' là function scope."],
+            "answer": "'var' có thể được khai báo lại, 'let' thì không.",
+            "topic": "JavaScript"
+        },
+        {
+            "id": 9,
+            "question": "Virtual DOM là gì trong React?",
+            "options": ["Là một phiên bản đơn giản của DOM thật.", "Là nơi lưu trữ tất cả các component state.", "Là một thư viện JavaScript để thao tác trực tiếp với DOM.", "Là API để giao tiếp với server."],
+            "answer": "Là một phiên bản đơn giản của DOM thật.",
+            "topic": "React"
+        },
+        {
+            "id": 10,
+            "question": "Tag HTML nào dùng để tạo danh sách không thứ tự?",
+            "options": ["<ol>", "<ul>", "<dl>", "<li>"],
+            "answer": "<ul>",
+            "topic": "HTML"
+        },
+        {
+            "id": 11,
+            "question": "Trong Flexbox CSS, thuộc tính nào điều chỉnh sự sắp xếp của các mục dọc theo trục chính?",
+            "options": ["align-items", "flex-direction", "justify-content", "align-content"],
+            "answer": "justify-content",
+            "topic": "CSS"
+        },
+        {
+            "id": 12,
+            "question": "Trong JavaScript, `==` và `===` khác nhau như thế nào?",
+            "options": ["`==` so sánh giá trị và kiểu dữ liệu; `===` chỉ so sánh giá trị.", "`==` chỉ so sánh giá trị; `===` so sánh giá trị và kiểu dữ liệu.", "Cả hai đều giống nhau.", "`==` là toán tử gán; `===` là toán tử so sánh."],
+            "answer": "`==` chỉ so sánh giá trị; `===` so sánh giá trị và kiểu dữ liệu.",
+            "topic": "JavaScript"
+        },
+        {
+            "id": 13,
+            "question": "Sử dụng Hook `useEffect` với dependency array rỗng (`[]`) có ý nghĩa gì?",
+            "options": ["Chạy sau mỗi lần render.", "Chỉ chạy một lần sau lần render đầu tiên.", "Không bao giờ chạy.", "Chỉ chạy khi component unmount."],
+            "answer": "Chỉ chạy một lần sau lần render đầu tiên.",
+            "topic": "React"
+        },
+        {
+            "id": 14,
+            "question": "Thẻ HTML `<meta>` được đặt ở đâu?",
+            "options": ["Trong `<body>`", "Trong `<head>`", "Ở cuối tài liệu", "Trước thẻ `<html>`"],
+            "answer": "Trong `<head>`",
+            "topic": "HTML"
+        },
+        {
+            "id": 15,
+            "question": "Thuộc tính `position: relative;` trong CSS làm gì?",
+            "options": ["Xóa element khỏi luồng tài liệu.", "Đặt element tương đối với vị trí ban đầu của nó.", "Đặt element tương đối với cửa sổ trình duyệt.", "Đặt element tương đối với element cha gần nhất có vị trí khác 'static'."],
+            "answer": "Đặt element tương đối với vị trí ban đầu của nó.",
+            "topic": "CSS"
+        },
+        {
+            "id": 16,
+            "question": "ES6 giới thiệu tính năng nào để tạo các hàm nhanh hơn và ngắn hơn?",
+            "options": ["Promises", "Arrow Functions", "Classes", "Generators"],
+            "answer": "Arrow Functions",
+            "topic": "JavaScript"
+        },
+        {
+            "id": 17,
+            "question": "JSX trong React là viết tắt của từ gì?",
+            "options": ["JavaScript XML", "JSON eXtension", "JavaScript Syntax", "JS Extended"],
+            "answer": "JavaScript XML",
+            "topic": "React"
+        },
+        {
+            "id": 18,
+            "question": "Thuộc tính `aria-label` trong HTML có vai trò gì?",
+            "options": ["Cung cấp nhãn cho các trường biểu mẫu.", "Xác định phong cách văn bản.", "Cung cấp mô tả cho công cụ đọc màn hình (screen reader).", "Thiết lập kích thước của element."],
+            "answer": "Cung cấp mô tả cho công cụ đọc màn hình (screen reader).",
+            "topic": "HTML"
+        },
+        {
+            "id": 19,
+            "question": "Đơn vị đo lường nào trong CSS là tương đối với cỡ chữ của phần tử gốc (root element)?",
+            "options": ["em", "rem", "px", "vw"],
+            "answer": "rem",
+            "topic": "CSS"
+        },
+        {
+            "id": 20,
+            "question": "Trong JavaScript, `Promise.all()` làm gì?",
+            "options": ["Trả về promise đầu tiên được reject.", "Thực thi các promise tuần tự.", "Đợi tất cả các promise trong mảng hoàn thành.", "Không làm gì cả."],
+            "answer": "Đợi tất cả các promise trong mảng hoàn thành.",
+            "topic": "JavaScript"
+        }
+    ]
 }

@@ -63,7 +63,7 @@ export default function SignIn() {
   const userStore = useSelector((store: StoreType) => store.user);
 
   useEffect(() => {
-    if (!userStore.loading && userStore.data) {
+    if (!userStore.loading && userStore.data && userStore.data.role!=="admin") {
       window.location.href = "/home";
     }
   }, [userStore.data, userStore.loading]);

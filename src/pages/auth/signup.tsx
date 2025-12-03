@@ -14,6 +14,7 @@ export default function SignUp() {
     const email = (e.target as any).email.value.trim();
     const username = (e.target as any).username.value.trim();
     const password = (e.target as any).password.value.trim();
+    const role="user"
 
     // ✅ Kiểm tra bỏ trống
     if (!email || !username || !password) {
@@ -29,7 +30,7 @@ export default function SignUp() {
     }
 
     try {
-      const result = await Apis.user.signUp({ username, email, password });
+      const result = await Apis.user.signUp({ username, email, password,role });
       alert("🎉 Chúc mừng " + result.username + " đăng ký thành công!");
       (e.target as HTMLFormElement).reset(); // Xoá form sau khi đăng ký
     } catch (err: any) {

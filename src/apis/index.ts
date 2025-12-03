@@ -1,7 +1,7 @@
 import { UserApi } from "./cores/user.api";
-import { BoardApi } from "./cores/board.api";
+import {CourseApi } from "./cores/course.api";
 
 export const Apis={
     user:UserApi,
-    board:BoardApi,
+    course:CourseApi,
 }
