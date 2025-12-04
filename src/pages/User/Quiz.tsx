@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useCallback, useEffect } from 'react';
 import { CheckCircle, XCircle, ChevronLeft, ChevronRight, BookOpen, Clock, AlertTriangle, Loader2 } from 'lucide-react';
 import axios from 'axios';
+import { Apis } from "../../apis"; // Import Apis để lấy info user
+import "../User/User.css"; // Import CSS chung cho Header
 
 // --- Types & Interfaces ---
 
@@ -48,16 +51,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onConfirm
                     Hành động này không thể hoàn tác và bạn sẽ không thể sửa lại câu trả lời.
                 </p>
                 <div className="flex justify-end space-x-3">
-                    <button
-                        onClick={onCancel}
-                        className="px-5 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition duration-150 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                    >
+                    <button onClick={onCancel} className="px-5 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition duration-150">
                         Xem lại
                     </button>
-                    <button
-                        onClick={onConfirm}
-                        className="px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
+                    <button onClick={onConfirm} className="px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150">
                         Đồng ý nộp
                     </button>
                 </div>
@@ -70,7 +67,7 @@ const ResultModal: React.FC<ResultModalProps> = ({ isOpen, score, totalQuestions
     if (!isOpen) return null;
 
     const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-    const isPassing = score >= totalQuestions * 0.7; // 70% là đạt
+    const isPassing = score >= totalQuestions * 0.7;
 
     return (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50 p-4 backdrop-blur-sm animate-in fade-in duration-300">
@@ -107,10 +104,7 @@ const ResultModal: React.FC<ResultModalProps> = ({ isOpen, score, totalQuestions
                     </div>
                 </div>
 
-                <button
-                    onClick={onReset}
-                    className="w-full px-6 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-slate-300"
-                >
+                <button onClick={onReset} className="w-full px-6 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all duration-200">
                     Làm lại bài kiểm tra
                 </button>
             </div>
@@ -125,6 +119,7 @@ const Quiz: React.FC = () => {
     const [quizData, setQuizData] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [userData, setUserData] = useState<any>(null); // State User
 
     // State cho Logic Quiz
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
@@ -132,14 +127,29 @@ const Quiz: React.FC = () => {
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [showResultModal, setShowResultModal] = useState<boolean>(false);
     const [finalScore, setFinalScore] = useState<number>(0);
+
+    // ================== LẤY USER DATA (Header) ==================
+    // QUAN TRỌNG: Đặt useEffect này lên đầu để tránh lỗi Hooks khi return sớm
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (token) {
+                    const res = await Apis.user.me(token);
+                    setUserData(res);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getUserData();
+    }, []);
     
-    // FETCH DATA
+    // ================== FETCH QUIZ DATA ==================
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                // Sử dụng biến môi trường VITE_SV_HOST
-                // Ví dụ: VITE_SV_HOST=http://localhost:3000
                 const host = import.meta.env.VITE_SV_HOST || 'http://localhost:3000'; 
                 const response = await axios.get(`${host}/questions`);
                 
@@ -150,7 +160,7 @@ const Quiz: React.FC = () => {
                 }
             } catch (err: any) {
                 console.error("Lỗi khi fetch data:", err);
-                setError("Không thể tải câu hỏi. Vui lòng kiểm tra kết nối tới server (json-server).");
+                setError("Không thể tải câu hỏi. Vui lòng kiểm tra kết nối tới server.");
             } finally {
                 setIsLoading(false);
             }
@@ -187,10 +197,7 @@ const Quiz: React.FC = () => {
         }
     };
 
-    const handleSubmitQuiz = () => {
-        setShowConfirmModal(true);
-    };
-
+    const handleSubmitQuiz = () => setShowConfirmModal(true);
     const confirmSubmission = () => {
         setShowConfirmModal(false);
         calculateScore();
@@ -251,11 +258,7 @@ const Quiz: React.FC = () => {
                         }
 
                         return (
-                            <button
-                                key={q.id}
-                                onClick={() => goToQuestion(index)}
-                                className={buttonStyle}
-                            >
+                            <button key={q.id} onClick={() => goToQuestion(index)} className={buttonStyle}>
                                 {index + 1}
                             </button>
                         );
@@ -286,7 +289,6 @@ const Quiz: React.FC = () => {
             <div className="min-h-screen bg-[#F3F4F6] flex flex-col items-center justify-center text-gray-500">
                 <Loader2 className="w-12 h-12 animate-spin text-indigo-600 mb-4" />
                 <p className="text-lg font-medium">Đang tải câu hỏi...</p>
-                <p className="text-sm mt-2">Đảm bảo bạn đã chạy: <code>json-server --watch db.json</code></p>
             </div>
         );
     }
@@ -298,10 +300,7 @@ const Quiz: React.FC = () => {
                     <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Đã xảy ra lỗi</h2>
                     <p className="text-gray-600 mb-6">{error}</p>
-                    <button 
-                        onClick={() => window.location.reload()}
-                        className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-                    >
+                    <button onClick={() => window.location.reload()} className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
                         Tải lại trang
                     </button>
                 </div>
@@ -311,147 +310,170 @@ const Quiz: React.FC = () => {
 
     // --- MAIN RENDER ---
     return (
-        <div className="min-h-screen bg-[#F3F4F6] text-gray-800 font-sans p-4 md:p-6 lg:p-8">
-            <div className="max-w-7xl mx-auto h-[calc(100vh-4rem)] md:h-[calc(100vh-6rem)]">
-                
-                {/* Header Mobile */}
-                <header className="md:hidden mb-6 flex justify-between items-center">
-                    <h1 className="text-xl font-bold text-gray-800">FE Quiz</h1>
-                    <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">
-                        {currentQuestionIndex + 1}/{totalQuestions}
-                    </div>
-                </header>
+        <>
+            {/* ====================== HEADER ======================= */}
+            {/* Sử dụng class 'app-header' từ UserStyles.css */}
+            <header className="app-header">
+                <div className="header-left">
+                    <h1 onClick={() => window.location.href = "/home"}>Learn-Hub</h1>
+                    <div className="nav-item" onClick={() => window.location.href = "/home"}>Khóa học</div>
+                    <div className="nav-item" onClick={() => window.location.href = "/confirm"}>Kiểm tra</div>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-full">
+                <div className="header-right">
+                    {userData && (
+                        <span className="user-greeting">
+                            Hi, {userData.username || userData.fullName || "User"}
+                        </span>
+                    )}
+                    <button className="btn-logout" onClick={() => { localStorage.removeItem("token"); window.location.href = "/" }}>Logout</button>
+                </div>
+            </header>
+
+            {/* ====================== BODY ======================= */}
+            {/* Wrapper chính: height = 100vh - 64px (Header height) */}
+            <div className="bg-[#F3F4F6] text-gray-800 font-sans p-4 md:p-6 lg:p-8" style={{ height: 'calc(100vh - 64px)' }}>
+                <div className="max-w-7xl mx-auto h-full flex flex-col">
                     
-                    {/* Sidebar Area */}
-                    <div className="hidden md:block md:col-span-4 lg:col-span-3 h-full sticky top-0">
-                        {renderSidebar()}
-                    </div>
+                    {/* Header Mobile (Vẫn giữ để hiển thị số câu hỏi trên mobile) */}
+                    <header className="md:hidden mb-4 flex justify-between items-center flex-shrink-0">
+                        <h2 className="text-lg font-bold text-gray-700">Bài kiểm tra</h2>
+                        <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">
+                            {currentQuestionIndex + 1}/{totalQuestions}
+                        </div>
+                    </header>
 
-                    {/* Main Question Area */}
-                    <div className="md:col-span-8 lg:col-span-9 flex flex-col h-full">
-                        {currentQuestion ? (
-                            <div className="flex-1 bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-10 flex flex-col relative overflow-hidden">
-                                
-                                {/* Topic Badge */}
-                                <div className="absolute top-0 right-0 p-6">
-                                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-100">
-                                        {currentQuestion.topic}
-                                    </span>
-                                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-full overflow-hidden">
+                        
+                        {/* Sidebar Area */}
+                        <div className="hidden md:block md:col-span-4 lg:col-span-3 h-full sticky top-0">
+                            {renderSidebar()}
+                        </div>
 
-                                {/* Question Header */}
-                                <div className="mb-8 mt-2">
-                                    <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
-                                        <span className="text-indigo-600 text-lg md:text-xl block mb-2 font-bold uppercase tracking-wide">
-                                            Câu hỏi {currentQuestionIndex + 1}
-                                        </span>
-                                        {currentQuestion.question}
-                                    </h2>
-                                </div>
-
-                                {/* Options */}
-                                <div className="flex-1 space-y-3 overflow-y-auto pr-2 custom-scrollbar">
-                                    {currentQuestion.options.map((option, index) => {
-                                        const isSelected = userAnswers[currentQuestion.id] === option;
-                                        
-                                        return (
-                                            <button
-                                                key={index}
-                                                onClick={() => handleAnswerSelect(option)}
-                                                className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-200 group flex items-start ${
-                                                    isSelected
-                                                        ? "border-indigo-600 bg-indigo-50 shadow-md"
-                                                        : "border-gray-200 hover:border-indigo-300 hover:bg-gray-50"
-                                                }`}
-                                            >
-                                                <div className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mr-4 transition-colors ${
-                                                    isSelected ? "border-indigo-600 bg-indigo-600" : "border-gray-400 group-hover:border-indigo-400"
-                                                }`}>
-                                                    {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
-                                                </div>
-                                                <span className={`text-lg font-medium ${isSelected ? "text-indigo-900" : "text-gray-700"}`}>
-                                                    {option}
-                                                </span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-
-                                {/* Navigation Footer */}
-                                <div className="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center">
-                                    <button
-                                        onClick={() => goToQuestion(currentQuestionIndex - 1)}
-                                        disabled={currentQuestionIndex === 0}
-                                        className="flex items-center px-5 py-2.5 text-gray-600 font-semibold rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
-                                    >
-                                        <ChevronLeft className="w-5 h-5 mr-1" />
-                                        Câu trước
-                                    </button>
+                        {/* Main Question Area */}
+                        <div className="md:col-span-8 lg:col-span-9 flex flex-col h-full overflow-hidden">
+                            {currentQuestion ? (
+                                <div className="flex-1 bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-10 flex flex-col relative overflow-hidden">
                                     
-                                    <button
-                                        onClick={() => goToQuestion(currentQuestionIndex + 1)}
-                                        disabled={currentQuestionIndex === totalQuestions - 1}
-                                        className="flex items-center px-6 py-2.5 bg-gray-900 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 disabled:opacity-30 disabled:shadow-none transition-all transform hover:-translate-y-0.5"
-                                    >
-                                        Câu tiếp
-                                        <ChevronRight className="w-5 h-5 ml-1" />
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                             <div className="flex-1 bg-white rounded-2xl shadow-xl flex items-center justify-center">
-                                <p className="text-gray-500">Không có dữ liệu câu hỏi nào.</p>
-                            </div>
-                        )}
+                                    {/* Topic Badge */}
+                                    <div className="absolute top-0 right-0 p-6">
+                                        <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-100">
+                                            {currentQuestion.topic}
+                                        </span>
+                                    </div>
 
-                        {/* Mobile Navigation for Question List */}
-                        <div className="md:hidden mt-4 bg-white p-4 rounded-xl shadow-lg border border-gray-100">
-                             <div className="flex justify-between items-center mb-4">
-                                <span className="font-bold text-gray-700">Điều hướng nhanh</span>
-                                <span className="text-sm text-indigo-600 font-semibold">{answeredCount}/{totalQuestions} Đã làm</span>
-                             </div>
-                             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                                {quizData.map((q, i) => (
-                                    <button
-                                        key={q.id}
-                                        onClick={() => goToQuestion(i)}
-                                        className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm border ${
-                                            i === currentQuestionIndex ? "bg-indigo-600 text-white border-indigo-600" :
-                                            userAnswers[q.id] ? "bg-emerald-100 text-emerald-700 border-emerald-200" :
-                                            "bg-gray-50 text-gray-500 border-gray-200"
-                                        }`}
-                                    >
-                                        {i + 1}
-                                    </button>
-                                ))}
-                             </div>
-                             <button
-                                onClick={handleSubmitQuiz}
-                                className="w-full mt-3 py-2 bg-indigo-600 text-white rounded-lg font-bold text-sm shadow-md"
-                            >
-                                Nộp bài
-                            </button>
+                                    {/* Question Header */}
+                                    <div className="mb-8 mt-2 flex-shrink-0">
+                                        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
+                                            <span className="text-indigo-600 text-lg md:text-xl block mb-2 font-bold uppercase tracking-wide">
+                                                Câu hỏi {currentQuestionIndex + 1}
+                                            </span>
+                                            {currentQuestion.question}
+                                        </h2>
+                                    </div>
+
+                                    {/* Options (Cuộn bên trong vùng này) */}
+                                    <div className="flex-1 space-y-3 overflow-y-auto pr-2 custom-scrollbar">
+                                        {currentQuestion.options.map((option, index) => {
+                                            const isSelected = userAnswers[currentQuestion.id] === option;
+                                            
+                                            return (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => handleAnswerSelect(option)}
+                                                    className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-200 group flex items-start ${
+                                                        isSelected
+                                                            ? "border-indigo-600 bg-indigo-50 shadow-md"
+                                                            : "border-gray-200 hover:border-indigo-300 hover:bg-gray-50"
+                                                    }`}
+                                                >
+                                                    <div className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mr-4 transition-colors ${
+                                                        isSelected ? "border-indigo-600 bg-indigo-600" : "border-gray-400 group-hover:border-indigo-400"
+                                                    }`}>
+                                                        {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                                                    </div>
+                                                    <span className={`text-lg font-medium ${isSelected ? "text-indigo-900" : "text-gray-700"}`}>
+                                                        {option}
+                                                    </span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Navigation Footer */}
+                                    <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center flex-shrink-0">
+                                        <button
+                                            onClick={() => goToQuestion(currentQuestionIndex - 1)}
+                                            disabled={currentQuestionIndex === 0}
+                                            className="flex items-center px-5 py-2.5 text-gray-600 font-semibold rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                                        >
+                                            <ChevronLeft className="w-5 h-5 mr-1" />
+                                            Câu trước
+                                        </button>
+                                        
+                                        <button
+                                            onClick={() => goToQuestion(currentQuestionIndex + 1)}
+                                            disabled={currentQuestionIndex === totalQuestions - 1}
+                                            className="flex items-center px-6 py-2.5 bg-gray-900 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 disabled:opacity-30 disabled:shadow-none transition-all transform hover:-translate-y-0.5"
+                                        >
+                                            Câu tiếp
+                                            <ChevronRight className="w-5 h-5 ml-1" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex-1 bg-white rounded-2xl shadow-xl flex items-center justify-center">
+                                    <p className="text-gray-500">Không có dữ liệu câu hỏi nào.</p>
+                                </div>
+                            )}
+
+                            {/* Mobile Navigation for Question List (Chỉ hiện trên Mobile) */}
+                            <div className="md:hidden mt-4 bg-white p-4 rounded-xl shadow-lg border border-gray-100 flex-shrink-0">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="font-bold text-gray-700">Điều hướng nhanh</span>
+                                    <span className="text-sm text-indigo-600 font-semibold">{answeredCount}/{totalQuestions} Đã làm</span>
+                                </div>
+                                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                    {quizData.map((q, i) => (
+                                        <button
+                                            key={q.id}
+                                            onClick={() => goToQuestion(i)}
+                                            className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm border ${
+                                                i === currentQuestionIndex ? "bg-indigo-600 text-white border-indigo-600" :
+                                                userAnswers[q.id] ? "bg-emerald-100 text-emerald-700 border-emerald-200" :
+                                                "bg-gray-50 text-gray-500 border-gray-200"
+                                            }`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    ))}
+                                </div>
+                                <button
+                                    onClick={handleSubmitQuiz}
+                                    className="w-full mt-3 py-2 bg-indigo-600 text-white rounded-lg font-bold text-sm shadow-md"
+                                >
+                                    Nộp bài
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Modals */}
-            <ConfirmationModal 
-                isOpen={showConfirmModal}
-                onConfirm={confirmSubmission}
-                onCancel={() => setShowConfirmModal(false)}
-            />
-            
-            <ResultModal
-                isOpen={showResultModal}
-                score={finalScore}
-                totalQuestions={totalQuestions}
-                onReset={handleReset}
-            />
-        </div>
+                {/* Modals */}
+                <ConfirmationModal 
+                    isOpen={showConfirmModal}
+                    onConfirm={confirmSubmission}
+                    onCancel={() => setShowConfirmModal(false)}
+                />
+                
+                <ResultModal
+                    isOpen={showResultModal}
+                    score={finalScore}
+                    totalQuestions={totalQuestions}
+                    onReset={handleReset}
+                />
+            </div>
+        </>
     );
 };
 
