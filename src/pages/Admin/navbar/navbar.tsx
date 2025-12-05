@@ -20,6 +20,14 @@ export default function NavBar() {
       >
         <i className="fa-solid fa-list-ul"></i> Users
       </div>
+      <div
+        className="navOption"
+        onClick={() => {
+          window.location.href = "/admin/manageExam";
+        }}
+      >
+        <i className="fa-solid fa-list-ul"></i> Exam Scores
+      </div>
       <div className="line"></div>
       <div
         className="navOption"

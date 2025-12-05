@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "../User/User.css"; 
 import { Apis } from "../../apis";
-import { CheckCircle, PlayCircle } from "lucide-react"; // Import thêm icon
+import { CheckCircle, PlayCircle, Menu, ChevronLeft, BookOpen } from "lucide-react"; // Import thêm icon
 
 export default function LearnPage() {
     const { courseId } = useParams();
@@ -17,13 +17,17 @@ export default function LearnPage() {
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState<any>(null);
 
-    // --- STATE MỚI: Lưu bài học đang được chọn ---
+    // --- STATE MỚI ---
     const [selectedLesson, setSelectedLesson] = useState<any>(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Trạng thái đóng/mở sidebar
 
     const getUserData = async () => {
         try {
-            const res = await Apis.user.me(localStorage.getItem("token"));
-            setUserData(res);
+            const token = localStorage.getItem("token");
+            if(token) {
+                const res = await Apis.user.me(token);
+                setUserData(res);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -58,102 +62,64 @@ export default function LearnPage() {
     const getLessons = (sessionId: string) =>
         lessons.filter((l) => String(l.sessionId) === String(sessionId));
 
-    // ================== LOGIC CẬP NHẬT TIẾN ĐỘ (ĐÃ SỬA) ==================
+    // ================== LOGIC TIẾN ĐỘ ==================
     const markLessonCompleted = async (lessonId: string) => {
-        // 1. Debug: Kiểm tra xem dữ liệu đầu vào có đủ không
-        console.log("Bắt đầu đánh dấu bài:", lessonId);
-        if (!userData) {
-            console.error("Lỗi: Chưa có thông tin User");
-            return;
-        }
-        if (!courseId) {
-            console.error("Lỗi: Không lấy được courseId");
-            return;
-        }
+        if (!userData || !courseId) return;
 
-        // 2. Lấy tiến độ hiện tại, nếu chưa có field này thì tạo mảng rỗng
         const currentProgress = userData.learningProgress || [];
-        
-        // 3. Tìm xem user đã học khóa này chưa (Ép kiểu String để so sánh an toàn)
         const courseIndex = currentProgress.findIndex((p: any) => String(p.courseId) === String(courseId));
 
         let newProgress;
 
         if (courseIndex > -1) {
-            // --- TRƯỜNG HỢP 1: Đã có tiến độ khóa này ---
             const existingCourseProgress = currentProgress[courseIndex];
+            if (existingCourseProgress.completedLessonIds.includes(lessonId)) return; 
 
-            // Kiểm tra xem bài này đã xong chưa
-            if (existingCourseProgress.completedLessonIds.includes(lessonId)) {
-                console.log("Bài này đã hoàn thành trước đó rồi, không làm gì cả.");
-                return; 
-            }
-
-            // Tạo bản sao sâu (Deep copy) để React nhận biết thay đổi
             const updatedCourseProgress = {
                 ...existingCourseProgress,
                 completedLessonIds: [...existingCourseProgress.completedLessonIds, lessonId],
                 lastAccessedDate: new Date().toISOString()
             };
 
-            // Cập nhật mảng mới
             newProgress = [...currentProgress];
             newProgress[courseIndex] = updatedCourseProgress;
-
         } else {
-            // --- TRƯỜNG HỢP 2: Chưa học khóa này bao giờ ---
-            console.log("Tạo tiến độ mới cho khóa học:", courseId);
             const newCourseProgress = {
-                courseId: courseId, // Lưu ý: server sẽ lưu string hay number tùy vào input này
+                courseId: courseId,
                 completedLessonIds: [lessonId],
                 lastAccessedDate: new Date().toISOString()
             };
-            
             newProgress = [...currentProgress, newCourseProgress];
         }
 
-        // 4. Gọi API update
         try {
-            console.log("Đang gọi API PATCH với dữ liệu:", newProgress);
-            
-            await axios.patch(`${API}/users/${userData.id}`, {
-                learningProgress: newProgress
-            });
-
-            console.log("Cập nhật thành công!");
-
-            // 5. Cập nhật UI ngay lập tức
-            setUserData((prev: any) => ({
-                ...prev,
-                learningProgress: newProgress
-            }));
-
+            await axios.patch(`${API}/users/${userData.id}`, { learningProgress: newProgress });
+            setUserData((prev: any) => ({ ...prev, learningProgress: newProgress }));
         } catch (error) {
-            console.error("Lỗi khi gọi API PATCH:", error);
+            console.error("Lỗi cập nhật tiến độ:", error);
         }
     };
 
-    // ================== HANDLE SELECT ==================
     const handleSelectLesson = (lesson: any) => {
         setSelectedLesson(lesson);
-        
-        // Gọi hàm đánh dấu hoàn thành
         markLessonCompleted(lesson.id);
-
-        // Cuộn lên đầu
-        const contentDiv = document.querySelector('.main-content-detail');
+        const contentDiv = document.querySelector('.lesson-scroll-container');
         if(contentDiv) contentDiv.scrollTop = 0;
+        
+        // Trên mobile thì tự động đóng sidebar sau khi chọn bài
+        if (window.innerWidth < 768) {
+            setIsSidebarOpen(false);
+        }
     };
 
-    // Helper: Kiểm tra bài học đã hoàn thành chưa để render UI
     const isLessonCompleted = (lessonId: string) => {
         if (!userData || !userData.learningProgress) return false;
         const prog = userData.learningProgress.find((p: any) => String(p.courseId) === String(courseId));
         return prog ? prog.completedLessonIds.includes(lessonId) : false;
     };
 
-    if (loading) return <h2 style={{ padding: 40 }}>Đang tải...</h2>;
-    if (!course) return <h2 style={{ padding: 40 }}>⚠ Không tìm thấy khóa học</h2>;
+    if (loading) return <div className="loading-screen">Đang tải dữ liệu...</div>;
+    if (!course) return <div className="loading-screen">⚠ Không tìm thấy khóa học</div>;
 
     return (
         <>
@@ -180,72 +146,111 @@ export default function LearnPage() {
                 </div>
             </header>
 
-            <div className="course-detail-layout" style={{ height: 'calc(100vh - 64px)' }}>
-                {/* ==== SIDEBAR ==== */}
-                <div className="sidebar">
-                    <h2>{course.title}</h2>
+            <div className="course-detail-layout">
+                {/* ==== SIDEBAR (Có thể đóng mở) ==== */}
+                <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+                    <div className="sidebar-header">
+                        <h2 title={course.title}>{course.title}</h2>
+                        <button className="btn-close-sidebar" onClick={() => setIsSidebarOpen(false)}>
+                            <ChevronLeft size={20}/>
+                        </button>
+                    </div>
 
-                    {sessions.map((ses) => (
-                        <div className="session" key={ses.id}>
-                            <h3>{ses.title}</h3>
+                    <div className="sidebar-content custom-scrollbar">
+                        {sessions.map((ses, index) => (
+                            <div className="session" key={ses.id}>
+                                <div className="session-title">
+                                    <strong>Phần {index + 1}:</strong> {ses.title}
+                                </div>
 
-                            {getLessons(ses.id).length ? (
-                                getLessons(ses.id).map((lesson) => {
-                                    const completed = isLessonCompleted(lesson.id);
-                                    const isActive = selectedLesson?.id === lesson.id;
-                                    
-                                    return (
-                                        <div 
-                                            className={`lesson ${isActive ? 'active-lesson' : ''}`} 
-                                            key={lesson.id}
-                                            onClick={() => handleSelectLesson(lesson)}
-                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                                        >
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                {/* Icon Play */}
-                                                <PlayCircle size={14} className={isActive ? "text-blue-600" : "text-gray-400"} />
-                                                <span>{lesson.title}</span>
-                                            </div>
-
-                                            {/* Icon Check nếu đã hoàn thành */}
-                                            {completed && <CheckCircle size={16} color="#10b981" fill="#d1fae5" />}
-                                        </div>
-                                    );
-                                })
-                            ) : (
-                                <div style={{ opacity: 0.6, paddingLeft: 14, fontSize: 14 }}>Chưa có bài học</div>
-                            )}
-                        </div>
-                    ))}
+                                <div className="lesson-list">
+                                    {getLessons(ses.id).length ? (
+                                        getLessons(ses.id).map((lesson, lIdx) => {
+                                            const completed = isLessonCompleted(lesson.id);
+                                            const isActive = selectedLesson?.id === lesson.id;
+                                            
+                                            return (
+                                                <div 
+                                                    className={`lesson-item ${isActive ? 'active' : ''}`} 
+                                                    key={lesson.id}
+                                                    onClick={() => handleSelectLesson(lesson)}
+                                                >
+                                                    <div className="lesson-info">
+                                                        <span className="lesson-idx">{lIdx + 1}.</span>
+                                                        <span className="lesson-name">{lesson.title}</span>
+                                                    </div>
+                                                    <div className="lesson-status">
+                                                        {isActive ? (
+                                                            <PlayCircle size={16} className="text-blue-600" fill="currentColor" color="white"/>
+                                                        ) : completed ? (
+                                                            <CheckCircle size={16} className="text-emerald-500" />
+                                                        ) : (
+                                                            <div className="circle-placeholder"></div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className="empty-session">Chưa có bài học</div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* ==== MAIN CONTENT ==== */}
                 <div className="main-content-detail">
-                    {selectedLesson ? (
-                        <div className="lesson-display-area">
-                            <h1 className="lesson-title">{selectedLesson.title}</h1>
-                            <hr style={{margin: '20px 0', border: '1px solid #eee'}}/>
-                            
-                            <div 
-                                className="ql-editor-content"
-                                dangerouslySetInnerHTML={{ __html: selectedLesson.content }} 
-                            />
-                        </div>
-                    ) : (
-                        <div className="welcome-screen">
-                            <h2>Chào mừng bạn đến với khóa học: {course.title}</h2>
-                            <p>Vui lòng chọn một bài học ở danh sách bên trái để bắt đầu.</p>
-                            <img 
-                                src={course.backdrop} 
-                                alt="Course Backdrop" 
-                                style={{marginTop: 20, maxWidth: '100%', borderRadius: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} 
-                            />
-                        </div>
-                    )}
+                    {/* Toolbar điều khiển phía trên */}
+                    <div className="content-toolbar">
+                        {!isSidebarOpen && (
+                            <button className="btn-toggle-sidebar" onClick={() => setIsSidebarOpen(true)} title="Mở danh sách bài học">
+                                <Menu size={24} />
+                            </button>
+                        )}
+                        <span className="current-lesson-breadscrum">
+                            {selectedLesson ? selectedLesson.title : "Giới thiệu khóa học"}
+                        </span>
+                    </div>
 
-                    <footer className="app-footer" style={{ marginTop: '40px' }}>
-                        © {new Date().getFullYear()} – LearnHub Course Viewer
-                    </footer>
+                    <div className="lesson-scroll-container custom-scrollbar">
+                        <div className="lesson-inner-content">
+                            {selectedLesson ? (
+                                <div className="lesson-display-area">
+                                    <h1 className="lesson-main-title">{selectedLesson.title}</h1>
+                                    <div className="lesson-meta">
+                                        Cập nhật lần cuối: {new Date().toLocaleDateString('vi-VN')}
+                                    </div>
+                                    <hr className="lesson-divider"/>
+                                    
+                                    <div 
+                                        className="ql-editor-content"
+                                        dangerouslySetInnerHTML={{ __html: selectedLesson.content }} 
+                                    />
+                                </div>
+                            ) : (
+                                <div className="welcome-screen">
+                                    <div className="welcome-icon">
+                                        <BookOpen size={60} strokeWidth={1} />
+                                    </div>
+                                    <h2>Chào mừng bạn đến với khóa học</h2>
+                                    <h3 className="course-welcome-title">{course.title}</h3>
+                                    <p>Hãy chọn bài học đầu tiên từ danh sách bên trái (hoặc bấm vào icon 3 gạch) để bắt đầu hành trình.</p>
+                                    
+                                    {course.backdrop && (
+                                        <div className="welcome-image-wrapper">
+                                            <img src={course.backdrop} alt="Course Backdrop" />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <footer className="content-footer">
+                                © {new Date().getFullYear()} – LearnHub Learning System
+                            </footer>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

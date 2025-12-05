@@ -3,7 +3,7 @@ export default function Header() {
   return (
       <header>
         <div id="icon">
-          <img src="../src/imgs/HeaderTrello.png"></img>
+          <h1>LearnHub</h1>
         </div>
       </header>
   );

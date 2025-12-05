@@ -11,22 +11,25 @@ app.use(cors());
 app.use(express.json());
 
 // 2. KẾT NỐI MYSQL (Lưu ý Port 8080 theo hình ảnh bạn gửi)
-const db = mysql.createConnection({
+// Thay createConnection bằng createPool
+const db = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'huy0965507655',
     database: process.env.DB_NAME || 'my_elearning_db',
-    port: process.env.DB_PORT || 8080 // Cổng của Clever Cloud thường là 3306
+    port: process.env.DB_PORT || 8080,
+
+    // Thêm các cấu hình cho Pool
+    waitForConnections: true,
+    connectionLimit: 10, // Tối đa 10 kết nối cùng lúc
+    queueLimit: 0,
+    enableKeepAlive: true, // Giữ kết nối sống lâu hơn
+    keepAliveInitialDelay: 0
 });
 
-db.connect(err => {
-    if (err) {
-        console.error('❌ Lỗi kết nối DB:', err);
-        console.log('💡 Gợi ý: Kiểm tra lại password hoặc port trong MySQL Workbench.');
-    } else {
-        console.log('✅ Đã kết nối MySQL thành công tại cổng 8080!');
-    }
-});
+// Pool không cần gọi db.connect(), nó tự động kết nối khi cần.
+// Ta chỉ cần log ra để biết server đã khởi động.
+console.log('✅ Đã khởi tạo Connection Pool (Tự động nối lại khi bị ngắt)!');
 
 // Helper function: Biến MySQL Query thành Promise
 const query = (sql, params) => {
