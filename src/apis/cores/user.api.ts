@@ -27,7 +27,7 @@ export const UserApi = {
     }
 
     const newUser = await axios
-      .post(`${import.meta.env.VITE_SV_HOST}/users`, data)
+      .post(`${import.meta.env.VITE_SV_HOST}/users`, {...data,status:true,learningProgress:[],quizHistory:[]})
       .then((res) => {
         return res.data;
       })
