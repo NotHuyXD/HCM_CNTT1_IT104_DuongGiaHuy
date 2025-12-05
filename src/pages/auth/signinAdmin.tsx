@@ -13,22 +13,8 @@ export default function SignInAdmin() {
     const email = (e.target as any).email.value.trim();
     const password = (e.target as any).password.value.trim();
 
-    // Validate email và password
     if (!email || !password) {
-      setMessage({
-        type: "error",
-        text: "Email và mật khẩu không được bỏ trống!",
-      });
-      return;
-    }
-
-    // Regex kiểm tra định dạng email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setMessage({
-        type: "error",
-        text: "Email không đúng định dạng!",
-      });
+      setMessage({ type: "error", text: "Vui lòng nhập đầy đủ thông tin!" });
       return;
     }
 
@@ -37,56 +23,61 @@ export default function SignInAdmin() {
       const result = await Apis.user.signInAdmin(data);
       localStorage.setItem("token", result);
 
-      setMessage({
-        type: "success",
-        text: "Đăng nhập thành công!",
-      });
+      setMessage({ type: "success", text: "Đăng nhập Admin thành công!" });
 
-      // Sau 1.5s chuyển hướng sang /home
-      setTimeout(() => {
-        window.location.href = "/admin";
-      }, 1500);
+      setTimeout(() => { window.location.href = "/admin"; }, 1500);
     } catch (err: any) {
-      setMessage({
-        type: "error",
-        text: err.message || "Đăng nhập thất bại!",
-      });
+      setMessage({ type: "error", text: err.message || "Truy cập bị từ chối!" });
     }
 
-    // Ẩn thông báo sau 3 giây
-    setTimeout(() => {
-      setMessage(null);
-    }, 3000);
+    setTimeout(() => setMessage(null), 3000);
   }
 
   const userStore = useSelector((store: StoreType) => store.user);
 
   useEffect(() => {
-    if (!userStore.loading && userStore.data && userStore.data.role==="admin") {
+    if (!userStore.loading && userStore.data && userStore.data.role === "admin") {
       window.location.href = "/admin";
     }
   }, [userStore.data, userStore.loading]);
 
   return (
-    <div id="signIn">
-      <img src="../src/imgs/AuthTrello.png" alt="auth-logo" />
-
-      {/* Thông báo */}
-      {message && (
-        <div className={`alert ${message.type}`}>
-          <span>{message.text}</span>
-          <button onClick={() => setMessage(null)}>×</button>
+    <div className="auth-page">
+      {/* Backdrop Admin: Dùng ảnh khác để phân biệt */}
+      <div className="auth-backdrop" style={{backgroundImage: "url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2664&auto=format&fit=crop')"}}>
+        <div className="backdrop-content">
+          <h2>Quản trị hệ thống</h2>
+          <p>Truy cập dành riêng cho quản trị viên Learn-Hub.</p>
         </div>
-      )}
+      </div>
 
-      <form className="auth" onSubmit={handleSignIn}>
-        <p>Please sign in</p>
-        <input type="text" name="email" placeholder="Email address" />
-        <input type="password" name="password" placeholder="Password" />
-        <button type="submit">Đăng Nhập</button>
-      </form>
+      <div className="auth-form-section">
+        <div className="auth-logo" style={{color: '#dc2626'}}>Learn-Hub Admin</div>
+        <p className="auth-subtitle">Cổng đăng nhập quản trị</p>
 
-      <p>&copy; 2025 - Rikkei Education</p>
+        {message && (
+          <div className={`alert ${message.type}`}>
+            <span>{message.text}</span>
+            <button onClick={() => setMessage(null)}>×</button>
+          </div>
+        )}
+
+        <form className="auth-form" onSubmit={handleSignIn}>
+          <div className="input-group">
+            <label>Email quản trị</label>
+            <input className="auth-input" type="text" name="email" placeholder="admin@learnhub.com" />
+          </div>
+          
+          <div className="input-group">
+            <label>Mật khẩu</label>
+            <input className="auth-input" type="password" name="password" placeholder="Nhập mật khẩu" />
+          </div>
+
+          <button className="auth-btn" type="submit" style={{backgroundColor: '#dc2626'}}>Đăng Nhập Admin</button>
+        </form>
+
+        <p className="copyright">&copy; 2025 - Learn-Hub System</p>
+      </div>
     </div>
   );
 }

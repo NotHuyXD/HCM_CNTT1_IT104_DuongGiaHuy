@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "../User/User.css"; 
 import { Apis } from "../../apis";
+import { CheckCircle, PlayCircle } from "lucide-react"; // Import thêm icon
 
 export default function LearnPage() {
     const { courseId } = useParams();
@@ -54,16 +55,101 @@ export default function LearnPage() {
         fetchData();
     }, [courseId]);
 
-    // Hàm lọc lesson theo session (Convert String để so sánh an toàn vì db có thể lẫn lộn string/number)
     const getLessons = (sessionId: string) =>
         lessons.filter((l) => String(l.sessionId) === String(sessionId));
 
-    // Handle chọn bài học
+    // ================== LOGIC CẬP NHẬT TIẾN ĐỘ (ĐÃ SỬA) ==================
+    const markLessonCompleted = async (lessonId: string) => {
+        // 1. Debug: Kiểm tra xem dữ liệu đầu vào có đủ không
+        console.log("Bắt đầu đánh dấu bài:", lessonId);
+        if (!userData) {
+            console.error("Lỗi: Chưa có thông tin User");
+            return;
+        }
+        if (!courseId) {
+            console.error("Lỗi: Không lấy được courseId");
+            return;
+        }
+
+        // 2. Lấy tiến độ hiện tại, nếu chưa có field này thì tạo mảng rỗng
+        const currentProgress = userData.learningProgress || [];
+        
+        // 3. Tìm xem user đã học khóa này chưa (Ép kiểu String để so sánh an toàn)
+        const courseIndex = currentProgress.findIndex((p: any) => String(p.courseId) === String(courseId));
+
+        let newProgress;
+
+        if (courseIndex > -1) {
+            // --- TRƯỜNG HỢP 1: Đã có tiến độ khóa này ---
+            const existingCourseProgress = currentProgress[courseIndex];
+
+            // Kiểm tra xem bài này đã xong chưa
+            if (existingCourseProgress.completedLessonIds.includes(lessonId)) {
+                console.log("Bài này đã hoàn thành trước đó rồi, không làm gì cả.");
+                return; 
+            }
+
+            // Tạo bản sao sâu (Deep copy) để React nhận biết thay đổi
+            const updatedCourseProgress = {
+                ...existingCourseProgress,
+                completedLessonIds: [...existingCourseProgress.completedLessonIds, lessonId],
+                lastAccessedDate: new Date().toISOString()
+            };
+
+            // Cập nhật mảng mới
+            newProgress = [...currentProgress];
+            newProgress[courseIndex] = updatedCourseProgress;
+
+        } else {
+            // --- TRƯỜNG HỢP 2: Chưa học khóa này bao giờ ---
+            console.log("Tạo tiến độ mới cho khóa học:", courseId);
+            const newCourseProgress = {
+                courseId: courseId, // Lưu ý: server sẽ lưu string hay number tùy vào input này
+                completedLessonIds: [lessonId],
+                lastAccessedDate: new Date().toISOString()
+            };
+            
+            newProgress = [...currentProgress, newCourseProgress];
+        }
+
+        // 4. Gọi API update
+        try {
+            console.log("Đang gọi API PATCH với dữ liệu:", newProgress);
+            
+            await axios.patch(`${API}/users/${userData.id}`, {
+                learningProgress: newProgress
+            });
+
+            console.log("Cập nhật thành công!");
+
+            // 5. Cập nhật UI ngay lập tức
+            setUserData((prev: any) => ({
+                ...prev,
+                learningProgress: newProgress
+            }));
+
+        } catch (error) {
+            console.error("Lỗi khi gọi API PATCH:", error);
+        }
+    };
+
+    // ================== HANDLE SELECT ==================
     const handleSelectLesson = (lesson: any) => {
         setSelectedLesson(lesson);
-        // Cuộn lên đầu trang nội dung khi chuyển bài
+        
+        // Gọi hàm đánh dấu hoàn thành
+        markLessonCompleted(lesson.id);
+
+        // Cuộn lên đầu
         const contentDiv = document.querySelector('.main-content-detail');
         if(contentDiv) contentDiv.scrollTop = 0;
+    };
+
+    // Helper: Kiểm tra bài học đã hoàn thành chưa để render UI
+    const isLessonCompleted = (lessonId: string) => {
+        if (!userData || !userData.learningProgress) return false;
+        const prog = userData.learningProgress.find((p: any) => String(p.courseId) === String(courseId));
+        return prog ? prog.completedLessonIds.includes(lessonId) : false;
     };
 
     if (loading) return <h2 style={{ padding: 40 }}>Đang tải...</h2>;
@@ -103,17 +189,28 @@ export default function LearnPage() {
                             <h3>{ses.title}</h3>
 
                             {getLessons(ses.id).length ? (
-                                getLessons(ses.id).map((lesson) => (
-                                    <div 
-                                        // Thêm class 'active-lesson' nếu bài này đang được chọn
-                                        className={`lesson ${selectedLesson?.id === lesson.id ? 'active-lesson' : ''}`} 
-                                        key={lesson.id}
-                                        // Sự kiện click để hiển thị nội dung
-                                        onClick={() => handleSelectLesson(lesson)}
-                                    >
-                                        <span className="icon-play">▶</span> {lesson.title}
-                                    </div>
-                                ))
+                                getLessons(ses.id).map((lesson) => {
+                                    const completed = isLessonCompleted(lesson.id);
+                                    const isActive = selectedLesson?.id === lesson.id;
+                                    
+                                    return (
+                                        <div 
+                                            className={`lesson ${isActive ? 'active-lesson' : ''}`} 
+                                            key={lesson.id}
+                                            onClick={() => handleSelectLesson(lesson)}
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                                        >
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                {/* Icon Play */}
+                                                <PlayCircle size={14} className={isActive ? "text-blue-600" : "text-gray-400"} />
+                                                <span>{lesson.title}</span>
+                                            </div>
+
+                                            {/* Icon Check nếu đã hoàn thành */}
+                                            {completed && <CheckCircle size={16} color="#10b981" fill="#d1fae5" />}
+                                        </div>
+                                    );
+                                })
                             ) : (
                                 <div style={{ opacity: 0.6, paddingLeft: 14, fontSize: 14 }}>Chưa có bài học</div>
                             )}
@@ -128,7 +225,6 @@ export default function LearnPage() {
                             <h1 className="lesson-title">{selectedLesson.title}</h1>
                             <hr style={{margin: '20px 0', border: '1px solid #eee'}}/>
                             
-                            {/* Render HTML từ ReactQuill */}
                             <div 
                                 className="ql-editor-content"
                                 dangerouslySetInnerHTML={{ __html: selectedLesson.content }} 

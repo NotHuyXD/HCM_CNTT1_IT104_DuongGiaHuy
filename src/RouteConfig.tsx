@@ -11,6 +11,8 @@ import CoursesPage from "./pages/User/UserHome";
 import LearnPage from "./pages/User/CourseDetail";
 import Quiz from "./pages/User/Quiz";
 import QuizIntroPage from "./pages/User/QuizIntroPage";
+import DashboardPage from "./pages/User/DashboardPage";
+import QuizHistory from "./pages/Admin/manageExam/manageExam";
 
 export default function RouteConfig() {
   return (
@@ -20,6 +22,7 @@ export default function RouteConfig() {
         <Route path="/admin" element={<AdminContent />}></Route>
         <Route path="/admin/:courseId" element={<AdminDetail/>}></Route>
         <Route path="/admin/manageUser" element={<UserManagement/>}></Route>
+        <Route path="/admin/manageExam" element={<QuizHistory/>}></Route>
       </Route>
       <Route path="/" element={<SignIn />}></Route>
       <Route path="signup" element={<SignUp />}></Route>
@@ -27,6 +30,7 @@ export default function RouteConfig() {
       <Route path="/course/:courseId" element={<LearnPage/>}></Route>
       <Route path="/exam" element={<Quiz/>}></Route>
       <Route path="/confirm" element={<QuizIntroPage/>}></Route>
+      <Route path="/dashboard" element={<DashboardPage/>}></Route>
     </Routes>
   );
 }

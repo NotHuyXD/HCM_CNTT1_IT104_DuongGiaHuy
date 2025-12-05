@@ -6,23 +6,9 @@
       "email": "giahuy123@gmail.com",
       "password": "123",
       "role": "admin",
-      "status": true
-    },
-    {
-      "id": "ec03",
-      "username": "NhatHao",
-      "email": "nhathao123@gmail.com",
-      "password": "123",
-      "role": "admin",
-      "status": true
-    },
-    {
-      "id": "ec02",
-      "username": "HuyDuong",
-      "email": "giahuy2911@gmail.com",
-      "password": "123",
-      "role": "admin",
-      "status": true
+      "status": true,
+      "learningProgress": [],
+      "quizHistory": []
     },
     {
       "id": "b8e3",
@@ -30,7 +16,23 @@
       "email": "huygia1@gmail.com",
       "password": "123",
       "role": "user",
-      "status": true
+      "status": true,
+      "learningProgress": [
+        {
+          "courseId": "101",
+          "completedLessonIds": [
+            "5f15"
+          ],
+          "lastAccessedDate": "2025-12-04T02:10:25.317Z"
+        }
+      ],
+      "quizHistory": [
+        {
+          "score": 1,
+          "totalQuestions": 20,
+          "date": "2025-12-04T11:06:00.333Z"
+        }
+      ]
     },
     {
       "id": "581f",
@@ -38,7 +40,9 @@
       "email": "giahuy123456@gmail.com",
       "password": "123",
       "role": "user",
-      "status": true
+      "status": true,
+      "learningProgress": [],
+      "quizHistory": []
     }
   ],
   "courses": [

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, type FormEvent } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router"; // Lưu ý: bản react-router mới dùng 'react-router', cũ dùng 'react-router-dom'
 import "./auth.css";
 import { Apis } from "../../apis";
 import { useSelector } from "react-redux";
@@ -14,22 +14,8 @@ export default function SignIn() {
     const email = (e.target as any).email.value.trim();
     const password = (e.target as any).password.value.trim();
 
-    // Validate email và password
     if (!email || !password) {
-      setMessage({
-        type: "error",
-        text: "Email và mật khẩu không được bỏ trống!",
-      });
-      return;
-    }
-
-    // Regex kiểm tra định dạng email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setMessage({
-        type: "error",
-        text: "Email không đúng định dạng!",
-      });
+      setMessage({ type: "error", text: "Vui lòng nhập đầy đủ Email và Mật khẩu!" });
       return;
     }
 
@@ -38,59 +24,68 @@ export default function SignIn() {
       const result = await Apis.user.signIn(data);
       localStorage.setItem("token", result);
 
-      setMessage({
-        type: "success",
-        text: "Đăng nhập thành công!",
-      });
+      setMessage({ type: "success", text: "Đăng nhập thành công! Đang chuyển hướng..." });
 
-      // Sau 1.5s chuyển hướng sang /home
-      setTimeout(() => {
-        window.location.href = "/home";
-      }, 1500);
+      setTimeout(() => { window.location.href = "/home"; }, 1500);
     } catch (err: any) {
-      setMessage({
-        type: "error",
-        text: err.message || "Đăng nhập thất bại!",
-      });
+      setMessage({ type: "error", text: err.message || "Email hoặc mật khẩu không chính xác!" });
     }
 
-    // Ẩn thông báo sau 3 giây
-    setTimeout(() => {
-      setMessage(null);
-    }, 3000);
+    setTimeout(() => setMessage(null), 3000);
   }
 
   const userStore = useSelector((store: StoreType) => store.user);
 
   useEffect(() => {
-    if (!userStore.loading && userStore.data && userStore.data.role!=="admin") {
+    if (!userStore.loading && userStore.data && userStore.data.role !== "admin") {
       window.location.href = "/home";
     }
   }, [userStore.data, userStore.loading]);
 
   return (
-    <div id="signIn">
-      <img src="../src/imgs/AuthTrello.png" alt="auth-logo" />
-
-      {/* Thông báo */}
-      {message && (
-        <div className={`alert ${message.type}`}>
-          <span>{message.text}</span>
-          <button onClick={() => setMessage(null)}>×</button>
+    <div className="auth-page">
+      {/* Cột Trái: Backdrop */}
+      <div className="auth-backdrop">
+        <div className="backdrop-content">
+          <h2>Học tập không giới hạn.</h2>
+          <p>Tham gia cộng đồng Learn-Hub ngay hôm nay để mở rộng kiến thức và phát triển kỹ năng của bạn.</p>
         </div>
-      )}
+      </div>
 
-      <form className="auth" onSubmit={handleSignIn}>
-        <p>Please sign in</p>
-        <input type="text" name="email" placeholder="Email address" />
-        <input type="password" name="password" placeholder="Password" />
-        <p>
-          Don't have an account? <Link to="/signup">click here!</Link>
-        </p>
-        <button type="submit">Đăng Nhập</button>
-      </form>
+      {/* Cột Phải: Form */}
+      <div className="auth-form-section">
+        {/* Logo Text thay vì Ảnh */}
+        <div className="auth-logo">Learn-Hub.</div>
+        <p className="auth-subtitle">Chào mừng bạn quay trở lại!</p>
 
-      <p>&copy; 2025 - Rikkei Education</p>
+        {/* Alert Message */}
+        {message && (
+          <div className={`alert ${message.type}`}>
+            <span>{message.text}</span>
+            <button onClick={() => setMessage(null)}>×</button>
+          </div>
+        )}
+
+        <form className="auth-form" onSubmit={handleSignIn}>
+          <div className="input-group">
+            <label>Email</label>
+            <input className="auth-input" type="text" name="email" placeholder="Nhập địa chỉ email của bạn" />
+          </div>
+          
+          <div className="input-group">
+            <label>Mật khẩu</label>
+            <input className="auth-input" type="password" name="password" placeholder="Nhập mật khẩu" />
+          </div>
+
+          <button className="auth-btn" type="submit">Đăng Nhập</button>
+        </form>
+
+        <div className="auth-footer">
+          Chưa có tài khoản? <Link to="/signup">Đăng ký ngay</Link>
+        </div>
+
+        <p className="copyright">&copy; 2025 - Learn-Hub Education</p>
+      </div>
     </div>
   );
 }

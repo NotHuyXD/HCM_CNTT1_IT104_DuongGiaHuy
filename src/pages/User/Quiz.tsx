@@ -4,8 +4,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { CheckCircle, XCircle, ChevronLeft, ChevronRight, BookOpen, Clock, AlertTriangle, Loader2 } from 'lucide-react';
 import axios from 'axios';
-import { Apis } from "../../apis"; // Import Apis để lấy info user
-import "../User/User.css"; // Import CSS chung cho Header
+import { Apis } from "../../apis"; 
+import "../User/User.css"; 
 
 // --- Types & Interfaces ---
 
@@ -104,9 +104,14 @@ const ResultModal: React.FC<ResultModalProps> = ({ isOpen, score, totalQuestions
                     </div>
                 </div>
 
-                <button onClick={onReset} className="w-full px-6 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all duration-200">
-                    Làm lại bài kiểm tra
-                </button>
+                <div className="flex flex-col gap-3">
+                    <button onClick={onReset} className="w-full px-6 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all duration-200">
+                        Làm lại bài kiểm tra
+                    </button>
+                    <button onClick={() => window.location.href = '/dashboard'} className="w-full px-6 py-3.5 bg-white text-slate-700 border border-slate-200 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-all duration-200">
+                        Xem Dashboard
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -119,7 +124,7 @@ const Quiz: React.FC = () => {
     const [quizData, setQuizData] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [userData, setUserData] = useState<any>(null); // State User
+    const [userData, setUserData] = useState<any>(null);
 
     // State cho Logic Quiz
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
@@ -128,8 +133,9 @@ const Quiz: React.FC = () => {
     const [showResultModal, setShowResultModal] = useState<boolean>(false);
     const [finalScore, setFinalScore] = useState<number>(0);
 
-    // ================== LẤY USER DATA (Header) ==================
-    // QUAN TRỌNG: Đặt useEffect này lên đầu để tránh lỗi Hooks khi return sớm
+    const API_HOST = import.meta.env.VITE_SV_HOST || 'http://localhost:3000'; 
+
+    // 1. LẤY USER DATA
     useEffect(() => {
         const getUserData = async () => {
             try {
@@ -145,14 +151,12 @@ const Quiz: React.FC = () => {
         getUserData();
     }, []);
     
-    // ================== FETCH QUIZ DATA ==================
+    // 2. FETCH QUIZ DATA
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const host = import.meta.env.VITE_SV_HOST || 'http://localhost:3000'; 
-                const response = await axios.get(`${host}/questions`);
-                
+                const response = await axios.get(`${API_HOST}/questions`);
                 if (Array.isArray(response.data)) {
                     setQuizData(response.data);
                 } else {
@@ -165,23 +169,12 @@ const Quiz: React.FC = () => {
                 setIsLoading(false);
             }
         };
-
         fetchData();
     }, []);
 
     const totalQuestions = quizData.length;
     const currentQuestion = quizData[currentQuestionIndex];
     const answeredCount = Object.keys(userAnswers).length;
-
-    const calculateScore = useCallback(() => {
-        let score = 0;
-        quizData.forEach(q => {
-            if (userAnswers[q.id] === q.answer) {
-                score++;
-            }
-        });
-        setFinalScore(score);
-    }, [userAnswers, quizData]);
 
     const handleAnswerSelect = (option: string) => {
         if (!currentQuestion) return;
@@ -198,10 +191,50 @@ const Quiz: React.FC = () => {
     };
 
     const handleSubmitQuiz = () => setShowConfirmModal(true);
-    const confirmSubmission = () => {
+
+    // --- LOGIC QUAN TRỌNG: TÍNH ĐIỂM & LƯU DB ---
+    const confirmSubmission = async () => {
         setShowConfirmModal(false);
-        calculateScore();
+        
+        // 1. Tính điểm
+        let score = 0;
+        quizData.forEach(q => {
+            if (userAnswers[q.id] === q.answer) {
+                score++;
+            }
+        });
+        setFinalScore(score);
         setShowResultModal(true);
+
+        // 2. Lưu kết quả vào User (nếu đã đăng nhập)
+        if (userData) {
+            try {
+                // Tạo object kết quả mới
+                const newResult = {
+                    score: score,
+                    totalQuestions: totalQuestions,
+                    date: new Date().toISOString() // Lưu thời gian hiện tại
+                };
+
+                // Lấy lịch sử cũ (hoặc mảng rỗng nếu chưa có)
+                const currentHistory = userData.quizHistory ? [...userData.quizHistory] : [];
+                
+                // Thêm kết quả mới vào
+                const updatedHistory = [...currentHistory, newResult];
+
+                // Gọi API Patch để cập nhật DB
+                await axios.patch(`${API_HOST}/users/${userData.id}`, {
+                    quizHistory: updatedHistory
+                });
+
+                // Cập nhật state local để đồng bộ
+                setUserData({ ...userData, quizHistory: updatedHistory });
+                console.log("Đã lưu kết quả thi thành công!");
+
+            } catch (error) {
+                console.error("Lỗi khi lưu kết quả thi:", error);
+            }
+        }
     };
 
     const handleReset = () => {
@@ -311,31 +344,21 @@ const Quiz: React.FC = () => {
     // --- MAIN RENDER ---
     return (
         <>
-            {/* ====================== HEADER ======================= */}
-            {/* Sử dụng class 'app-header' từ UserStyles.css */}
             <header className="app-header">
                 <div className="header-left">
                     <h1 onClick={() => window.location.href = "/home"}>Learn-Hub</h1>
                     <div className="nav-item" onClick={() => window.location.href = "/home"}>Khóa học</div>
+                    <div className="nav-item" onClick={() => window.location.href = "/dashboard"}>Tiến độ</div>
                     <div className="nav-item" onClick={() => window.location.href = "/confirm"}>Kiểm tra</div>
                 </div>
-
                 <div className="header-right">
-                    {userData && (
-                        <span className="user-greeting">
-                            Hi, {userData.username || userData.fullName || "User"}
-                        </span>
-                    )}
+                    {userData && <span>Hi, {userData.username}</span>}
                     <button className="btn-logout" onClick={() => { localStorage.removeItem("token"); window.location.href = "/" }}>Logout</button>
                 </div>
             </header>
 
-            {/* ====================== BODY ======================= */}
-            {/* Wrapper chính: height = 100vh - 64px (Header height) */}
-            <div className="bg-[#F3F4F6] text-gray-800 font-sans p-4 md:p-6 lg:p-8" style={{ height: 'calc(100vh - 64px)' }}>
+            <div className="bg-[#F3F4F6] text-gray-800 font-sans p-4 md:p-6 lg:p-8 page-container" style={{ height: 'calc(100vh - 64px)' }}>
                 <div className="max-w-7xl mx-auto h-full flex flex-col">
-                    
-                    {/* Header Mobile (Vẫn giữ để hiển thị số câu hỏi trên mobile) */}
                     <header className="md:hidden mb-4 flex justify-between items-center flex-shrink-0">
                         <h2 className="text-lg font-bold text-gray-700">Bài kiểm tra</h2>
                         <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">
@@ -344,25 +367,19 @@ const Quiz: React.FC = () => {
                     </header>
 
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-full overflow-hidden">
-                        
-                        {/* Sidebar Area */}
                         <div className="hidden md:block md:col-span-4 lg:col-span-3 h-full sticky top-0">
                             {renderSidebar()}
                         </div>
 
-                        {/* Main Question Area */}
                         <div className="md:col-span-8 lg:col-span-9 flex flex-col h-full overflow-hidden">
                             {currentQuestion ? (
                                 <div className="flex-1 bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-10 flex flex-col relative overflow-hidden">
-                                    
-                                    {/* Topic Badge */}
                                     <div className="absolute top-0 right-0 p-6">
                                         <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-100">
                                             {currentQuestion.topic}
                                         </span>
                                     </div>
 
-                                    {/* Question Header */}
                                     <div className="mb-8 mt-2 flex-shrink-0">
                                         <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
                                             <span className="text-indigo-600 text-lg md:text-xl block mb-2 font-bold uppercase tracking-wide">
@@ -372,7 +389,6 @@ const Quiz: React.FC = () => {
                                         </h2>
                                     </div>
 
-                                    {/* Options (Cuộn bên trong vùng này) */}
                                     <div className="flex-1 space-y-3 overflow-y-auto pr-2 custom-scrollbar">
                                         {currentQuestion.options.map((option, index) => {
                                             const isSelected = userAnswers[currentQuestion.id] === option;
@@ -400,7 +416,6 @@ const Quiz: React.FC = () => {
                                         })}
                                     </div>
 
-                                    {/* Navigation Footer */}
                                     <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center flex-shrink-0">
                                         <button
                                             onClick={() => goToQuestion(currentQuestionIndex - 1)}
@@ -427,7 +442,6 @@ const Quiz: React.FC = () => {
                                 </div>
                             )}
 
-                            {/* Mobile Navigation for Question List (Chỉ hiện trên Mobile) */}
                             <div className="md:hidden mt-4 bg-white p-4 rounded-xl shadow-lg border border-gray-100 flex-shrink-0">
                                 <div className="flex justify-between items-center mb-4">
                                     <span className="font-bold text-gray-700">Điều hướng nhanh</span>
@@ -459,7 +473,6 @@ const Quiz: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Modals */}
                 <ConfirmationModal 
                     isOpen={showConfirmModal}
                     onConfirm={confirmSubmission}
