@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, type FormEvent } from "react";
@@ -203,27 +204,6 @@ export default function AdminDetail() {
               style={{ cursor: 'pointer' }}
             ></i>
           </div>
-          
-          <div className="titleButton">
-            <i className="fa-solid fa-chart-simple"></i>
-            <p>Course View</p>
-          </div>
-          <div className="titleButton">
-            <i className="fa-solid fa-table"></i>
-            <p>Statistics</p>
-          </div>
-          <div
-            className="titleButton"
-            style={{ width: "150px" }}
-            onClick={() => setCloseBoard(true)}
-          >
-            <i className="fa-solid fa-square-xmark"></i>
-            <p>Close this course</p>
-          </div>
-        </div>
-        <div id="filterButton" onClick={() => setOpenFilter(true)}>
-          <i className="fa-solid fa-filter"></i>
-          <p>Filter</p>
         </div>
       </div>
       <div id="taskList">

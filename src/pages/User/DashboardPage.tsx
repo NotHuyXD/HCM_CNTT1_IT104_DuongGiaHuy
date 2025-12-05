@@ -90,6 +90,7 @@ export default function DashboardPage() {
                     <h1 onClick={() => window.location.href = "/home"}>Learn-Hub</h1>
                     <div className="nav-item" onClick={() => window.location.href = "/home"}>Khóa học</div>
                     <div className="nav-item" onClick={() => window.location.href = "/confirm"}>Kiểm tra</div>
+                    <div className="nav-item" onClick={() => window.location.href = "/dashboard"}>Dashboard</div>
                 </div>
                 <div className="header-right">
                     <span className="user-greeting">Hi, {userData.username || userData.fullName}</span>
